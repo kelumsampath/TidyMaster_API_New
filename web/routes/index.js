@@ -16,6 +16,10 @@ router.get('/',(req,res)=>{
   res.send("Hello Tidyclean!");
 });
 
+router.get('/a',(req,res)=>{
+  res.send("Hello Tidyclean!");
+});
+
 router.post('/register',(req,res)=>{
   //console.log(req.body);
   const regUser = new datamodelds({
