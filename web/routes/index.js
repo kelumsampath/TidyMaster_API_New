@@ -24,6 +24,9 @@ router.get('/a',(req,res)=>{
 router.get('/b',(req,res)=>{
   res.send("Hello Tidyclean!");
 });
+router.get('/c',(req,res)=>{
+  res.send("Hello Tidyclean!");
+});
 
 router.post('/register',(req,res)=>{
   //console.log(req.body);
