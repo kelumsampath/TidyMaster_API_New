@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 var blacklist = require('express-jwt-blacklist');
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 3000;
