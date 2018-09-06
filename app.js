@@ -20,6 +20,8 @@ http.createServer(app).listen(port,(err)=>{
   }
 });
 
+app.use(cors());
+
 const connectDB = mongoose.connect(config.database,(err)=>{
 if(err){
   console.log("Warning! Database not connected");
