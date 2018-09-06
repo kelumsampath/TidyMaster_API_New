@@ -67,7 +67,7 @@ module.exports.revokeToken = function(token,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('DELETE FROM token WHERE token=?', [token],function (err, rows, fields) {
             if (err){
-                console.log(err);
+                //console.log(err);
                 callback(err);
             }else{
                 //dbconnection.connection.end();
