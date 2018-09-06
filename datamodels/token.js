@@ -71,13 +71,13 @@ module.exports.revokeToken = function(token,callback){
                 callback(err);
             }else{
                 //dbconnection.connection.end();
-                console.log("ddddd");
+               // console.log("ddddd");
                 callback(null,true);
             }
                
           })  
         }else{
-            console.log("ss");
+            //console.log("ss");
             callback(err);
         }
 }; 

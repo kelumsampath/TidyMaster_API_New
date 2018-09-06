@@ -1,10 +1,11 @@
 const mysql = require('mysql');
+const cofigdata = require('./../config/database').dbconfigdata;
 
 module.exports.connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'tidymaster'
+    host     : cofigdata.host,
+    user     : cofigdata.user,
+    password : cofigdata.password,
+    database : cofigdata.database
   });
 
 
