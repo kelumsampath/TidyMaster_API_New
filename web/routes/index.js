@@ -6,6 +6,7 @@ const passportjwt = require('passport-jwt');
 var blacklist = require('express-jwt-blacklist');
 var jwtp = require('express-jwt');
 const session = require('express-session');
+const cors = require('cors');
 
 const router = express.Router();
 const datamodelds = require('../../datamodels/user');
@@ -17,6 +18,10 @@ router.get('/',(req,res)=>{
 });
 
 router.get('/a',(req,res)=>{
+  res.send("Hello Tidyclean!");
+});
+
+router.get('/b',(req,res)=>{
   res.send("Hello Tidyclean!");
 });
 
