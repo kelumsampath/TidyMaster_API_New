@@ -30,23 +30,25 @@ router.get('/c',(req,res)=>{
 
 router.post('/register',(req,res)=>{
   //console.log(req.body);
-  const regUser = new datamodelds({
+ const regUser = {
     fullname:req.body.fullname,
     username:req.body.username,
     email:req.body.email,
     phoneno:req.body.phoneno,
     password:req.body.password
-  });
+  };
   //console.log(regUser);
   datamodelds.dbSave(regUser,(err,user)=>{
     if(err){
       
-        if (err.name === 'MongoError' && err.code === 11000) {
+        if (err.code === 'ER_DUP_ENTRY' ) {
             console.log('There was a duplicate key error');
             res.json({state:false,msg:"Duplicate user name error!"})
+        }else{
+          res.json({state:false,msg:"server error occured!!"});
         } 
     
-      res.json({state:false,msg:"server error occured!!"});
+      
     }else{
       res.json({state:true,msg:"data inserted!"})
     }
@@ -72,24 +74,32 @@ router.post('/login',(req,res)=>{
         if(match){
           //console.log({user});
          // res.json({state:true,msg:"Username, password mached!"});
-         const obj = { _id: user._id,
+         const obj = { uid: user.uid,
           fullname:user.fullname,
           username:user.username,
           email:user.email,
           phoneno:user.phoneno,
           password:user.password,
-          __v: user.__v };
+           };
       const newtoken = jwt.sign(obj,token.secrete,(err,newtoken)=>{
         if(err) {
           res.json({state:false,msg:"server error occured!!"});
         }
         else{
-          const newtoken2 = new tokenmodels({
+          const newtoken2 = {
+            uid:user.uid,
             token: newtoken
-          });
+          };
           
           tokenmodels.tokenSave(newtoken2,(err,saved)=>{
-            if(err) {res.json({state:false,msg:err}) ;}
+            if(err) {
+              if (err.code === 'ER_DUP_ENTRY' ) {
+              //console.log('There was a duplicate key error');
+              res.json({state:false,msg:"Duplicate key error!"})
+              }else{
+              res.json({state:false,msg:"server error occured!!"});
+             } 
+            }
             else{
                 res.json({
                 state:true,
