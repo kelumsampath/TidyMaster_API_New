@@ -79,7 +79,7 @@ router.post('/login',(req,res)=>{
           phoneno:user.phoneno,
           password:user.password,
           __v: user.__v };
-      const newtoken = jwt.sign(obj,token.secrete,{expiresIn:86400},(err,newtoken)=>{
+      const newtoken = jwt.sign(obj,token.secrete,(err,newtoken)=>{
         if(err) {
           res.json({state:false,msg:"server error occured!!"});
         }
