@@ -1,8 +1,11 @@
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const schema = mongoose.Schema;
+const dbconnection = require('./dbconnect');
+const shortid = require('shortid');
+//const schema = mongoose.Schema;
 
-const userSchema = new schema({
+
+/*const userSchema = new schema({
     fullname:{type:String,required:true},
     username:{type:String,required:true, unique:true},
     email:{type:String,required:true},
@@ -12,7 +15,7 @@ const userSchema = new schema({
 });
 
 const datamodels = module.exports = mongoose.model("datamodels",userSchema);
-
+*/
 module.exports.dbSave = function(regUser,callback){
 
         bcrypt.genSalt(10, function(err, salt) {
@@ -22,9 +25,22 @@ module.exports.dbSave = function(regUser,callback){
                 if(err){
                     throw err;
                 }else{
-                    regUser.save(err, callback);
-                   
-                    
+                   // regUser.save(err, callback);
+                   if(dbconnection.connection){ 
+                    dbconnection.connection.query('INSERT INTO user ( uid,username, password, email, telephone,firstName) VALUES (?,?,?,?,?,?)', [shortid.generate(),regUser.username, regUser.password, regUser.email, regUser.phoneno , regUser.fullname],function (err, rows, fields) {
+                        if (err){
+                            callback(err);
+                        }else{
+                            //dbconnection.connection.end();
+                            //console.log('The solution is: ');
+                            callback(null,true);
+                        }
+                      
+                        
+                      })  
+                   }else{
+                       callback(err);
+                   }
                 }
             });
         });
@@ -33,8 +49,23 @@ module.exports.dbSave = function(regUser,callback){
 
 
 module.exports.searchUser = function(username,callback){
-    const query = {username:username};
-    datamodels.findOne(query,callback);
+   // const query = {username:username};
+   // datamodels.findOne(query,callback);
+   if(dbconnection.connection){ 
+    dbconnection.connection.query('SELECT * FROM user WHERE username=?', [username],function (err, rows, fields) {
+        if (err){
+            callback(err);
+        }else{
+            //dbconnection.connection.end();
+            //console.log(rows[0]);
+            callback(null,rows[0]);
+        }
+      
+        
+      })  
+   }else{
+       callback(err);
+   }
 }; 
 
 
