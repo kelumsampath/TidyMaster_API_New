@@ -194,5 +194,18 @@ router.post('/job/getalljobs',(req,res)=>{
   }) 
  });
 
+ router.post('/job/viewjob',(req,res)=>{
+   //console.log(req.body.postid)
+ 
+  jobmodel.viewjob(req.body.postid,(err,job)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,job:job});
+    }
+  }) 
+ });
+
 
 module.exports = router;
