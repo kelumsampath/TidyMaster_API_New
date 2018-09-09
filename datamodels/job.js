@@ -29,7 +29,7 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.getalljobs=function(callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.status=?', ["pending"],function (err, rows, fields) {
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.status=?', ["accepted"],function (err, rows, fields) {
             if (err){
                 callback(err);
             }else{
@@ -57,6 +57,36 @@ module.exports.jobsave=function(job,callback){
             }
           
             
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.adminalljobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid ',function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.changepoststatus=function(postdata,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('UPDATE jobrequestpost SET status=? WHERE postid=?', [postdata.status,postdata.postid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
           })  
        }else{
            callback(err);

@@ -207,5 +207,69 @@ router.post('/job/getalljobs',(req,res)=>{
   }) 
  });
 
+ router.post('/job/adminalljobs',(req,res)=>{
+ 
+  jobmodel.adminalljobs((err,jobs)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,jobs:jobs});
+    }
+  }) 
+ });
+
+ router.post('/admin/acceptpost',(req,res)=>{
+   const postdata={
+     "postid":req.body.postid,
+     "status":"accepted"
+   }
+   //console.log(postdata)
+   
+  jobmodel.changepoststatus(postdata,(err,msg)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,msg:"Status changed!"});
+    }
+  }) 
+ });
+
+ router.post('/admin/rejectpost',(req,res)=>{
+  const postdata={
+    "postid":req.body.postid,
+    "status":"rejected"
+  }
+  //console.log(postdata)
+  
+ jobmodel.changepoststatus(postdata,(err,msg)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,msg:"Status changed!"});
+   }
+ }) 
+});
+
+router.post('/admin/pendingpost',(req,res)=>{
+  const postdata={
+    "postid":req.body.postid,
+    "status":"pending"
+  }
+  //console.log(postdata)
+  
+ jobmodel.changepoststatus(postdata,(err,msg)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,msg:"Status changed!"});
+   }
+ }) 
+});
+
+
 
 module.exports = router;
