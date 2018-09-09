@@ -182,5 +182,17 @@ router.post('/job/jobpost',token.verifytoken,(req,res)=>{
   
 });
 
+router.post('/job/getalljobs',(req,res)=>{
+ 
+  jobmodel.getalljobs((err,jobs)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,jobs:jobs});
+    }
+  }) 
+ });
+
 
 module.exports = router;

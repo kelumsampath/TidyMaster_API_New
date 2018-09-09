@@ -26,3 +26,21 @@ module.exports.jobsave=function(job,callback){
         callback(err);
     }
  }; 
+
+ module.exports.getalljobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.status=?', ["pending"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
