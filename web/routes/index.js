@@ -11,6 +11,7 @@ const cors = require('cors');
 const router = express.Router();
 const datamodelds = require('../../datamodels/user');
 const tokenmodels = require('../../datamodels/token');
+const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 
 router.get('/',(req,res)=>{
@@ -157,8 +158,29 @@ router.get('/logout',token.verifytoken,(req,res)=>{
   
 });
 
-
-
+router.post('/job/jobpost',token.verifytoken,(req,res)=>{
+ // console.log(req.user);
+  //console.log(req.body);
+  const job={
+    customerid:"aaa",
+    status:"pending",
+    title:req.body.jobtitle,
+    gender:req.body.gender,
+    priceperhour:req.body.priceperhour,
+    estimatedtime:req.body.estimatedtime,
+    joblocation:req.body.joblocation,
+    jobdate:req.body.jobdate
+  }
+  jobmodel.jobsave(job,(err,msg)=>{
+    if(err) {
+      console.log(err);
+      res.send({state:false,msg:"sdsdss"});
+    }else{   
+    res.send({state:true,msg:"sdsdss"});
+    }
+  })
+  
+});
 
 
 module.exports = router;

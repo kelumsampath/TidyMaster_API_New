@@ -1,9 +1,9 @@
 //const mysql = require('mysql')
 module.exports.dbconfigdata = {
-    "host"     : 'sql12.freemysqlhosting.net',
-    "user"     : 'sql12255438',
-    "password" : 'LIEY6al2fJ',
-    "database" : 'sql12255438'
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'tidymaster'
 };
 
 //mongodb://localhost:27017/tidyclean
