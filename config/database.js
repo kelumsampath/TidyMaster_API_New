@@ -1,5 +1,20 @@
-module.exports = {
-    "database" : "mongodb://tidymaster:tidymaster123@ds133762.mlab.com:33762/tidymaster",
+
+module.exports.dbconfigdata = {
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'tidymaster'
 };
 
-//mongodb://localhost:27017/tidyclean
+/*
+
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'tidymaster'
+  */
+
+  /*host     : 'sql12.freemysqlhosting.net',
+    user     : 'sql12255438',
+    password : 'LIEY6al2fJ',
+    database : 'sql12255438'*/

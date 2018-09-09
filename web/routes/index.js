@@ -11,6 +11,7 @@ const cors = require('cors');
 const router = express.Router();
 const datamodelds = require('../../datamodels/user');
 const tokenmodels = require('../../datamodels/token');
+const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 
 router.get('/',(req,res)=>{
@@ -30,23 +31,25 @@ router.get('/c',(req,res)=>{
 
 router.post('/register',(req,res)=>{
   //console.log(req.body);
-  const regUser = new datamodelds({
+ const regUser = {
     fullname:req.body.fullname,
     username:req.body.username,
     email:req.body.email,
     phoneno:req.body.phoneno,
     password:req.body.password
-  });
+  };
   //console.log(regUser);
   datamodelds.dbSave(regUser,(err,user)=>{
     if(err){
       
-        if (err.name === 'MongoError' && err.code === 11000) {
+        if (err.code === 'ER_DUP_ENTRY' ) {
             console.log('There was a duplicate key error');
             res.json({state:false,msg:"Duplicate user name error!"})
+        }else{
+          res.json({state:false,msg:"server error occured!!"});
         } 
     
-      res.json({state:false,msg:"server error occured!!"});
+      
     }else{
       res.json({state:true,msg:"data inserted!"})
     }
@@ -72,24 +75,32 @@ router.post('/login',(req,res)=>{
         if(match){
           //console.log({user});
          // res.json({state:true,msg:"Username, password mached!"});
-         const obj = { _id: user._id,
+         const obj = { uid: user.uid,
           fullname:user.fullname,
           username:user.username,
           email:user.email,
           phoneno:user.phoneno,
           password:user.password,
-          __v: user.__v };
+           };
       const newtoken = jwt.sign(obj,token.secrete,(err,newtoken)=>{
         if(err) {
           res.json({state:false,msg:"server error occured!!"});
         }
         else{
-          const newtoken2 = new tokenmodels({
+          const newtoken2 = {
+            uid:user.uid,
             token: newtoken
-          });
+          };
           
           tokenmodels.tokenSave(newtoken2,(err,saved)=>{
-            if(err) {res.json({state:false,msg:err}) ;}
+            if(err) {
+              if (err.code === 'ER_DUP_ENTRY' ) {
+              //console.log('There was a duplicate key error');
+              res.json({state:false,msg:"Duplicate key error!"})
+              }else{
+              res.json({state:false,msg:"server error occured!!"});
+             } 
+            }
             else{
                 res.json({
                 state:true,
@@ -147,7 +158,117 @@ router.get('/logout',token.verifytoken,(req,res)=>{
   
 });
 
+router.post('/job/jobpost',token.verifytoken,(req,res)=>{
+ // console.log(req.user);
+  //console.log(req.body);
+  const job={
+    customerid:"aaa",
+    status:"pending",
+    title:req.body.jobtitle,
+    gender:req.body.gender,
+    priceperhour:req.body.priceperhour,
+    estimatedtime:req.body.estimatedtime,
+    joblocation:req.body.joblocation,
+    jobdate:req.body.jobdate
+  }
+  jobmodel.jobsave(job,(err,msg)=>{
+    if(err) {
+      console.log(err);
+      res.send({state:false,msg:"sdsdss"});
+    }else{   
+    res.send({state:true,msg:"sdsdss"});
+    }
+  })
+  
+});
 
+router.post('/job/getalljobs',(req,res)=>{
+ 
+  jobmodel.getalljobs((err,jobs)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,jobs:jobs});
+    }
+  }) 
+ });
+
+ router.post('/job/viewjob',(req,res)=>{
+   //console.log(req.body.postid)
+ 
+  jobmodel.viewjob(req.body.postid,(err,job)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,job:job});
+    }
+  }) 
+ });
+
+ router.post('/job/adminalljobs',(req,res)=>{
+ 
+  jobmodel.adminalljobs((err,jobs)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,jobs:jobs});
+    }
+  }) 
+ });
+
+ router.post('/admin/acceptpost',(req,res)=>{
+   const postdata={
+     "postid":req.body.postid,
+     "status":"accepted"
+   }
+   //console.log(postdata)
+   
+  jobmodel.changepoststatus(postdata,(err,msg)=>{
+    if(err) {
+      //console.log(err);
+      res.send({state:false,msg:"Server error"});
+    }else{   
+    res.send({state:true,msg:"Status changed!"});
+    }
+  }) 
+ });
+
+ router.post('/admin/rejectpost',(req,res)=>{
+  const postdata={
+    "postid":req.body.postid,
+    "status":"rejected"
+  }
+  //console.log(postdata)
+  
+ jobmodel.changepoststatus(postdata,(err,msg)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,msg:"Status changed!"});
+   }
+ }) 
+});
+
+router.post('/admin/pendingpost',(req,res)=>{
+  const postdata={
+    "postid":req.body.postid,
+    "status":"pending"
+  }
+  //console.log(postdata)
+  
+ jobmodel.changepoststatus(postdata,(err,msg)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,msg:"Status changed!"});
+   }
+ }) 
+});
 
 
 
