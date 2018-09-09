@@ -7,19 +7,15 @@ module.exports.jobsave=function(job,callback){
    // callback(null,true);
   if(dbconnection.connection){ 
       const postid = shortid.generate();
-     dbconnection.connection.query('INSERT INTO jobrequestpost (postid,customerid,dateandtime,status) VALUES (?,?,?,?)', [postid,job.customerid,mydate('full', '-', ':'),job.status],function (err, rows, fields) {
+     dbconnection.connection.query('call saveAPost(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [postid,job.customerid,job.catid,mydate('full', '-', ':'),mydate('full', '-', ':'),job.status,shortid.generate(),job.title,job.levelofjob,job.gender,job.priceperhour,job.estimatedtime,job.numberofcleaners,job.joblocation,job.jobdate,job.timeforstartjob,job.paymentstatus],function (err, rows, fields) {
          if (err){
              callback(err);
          }else{
-            dbconnection.connection.query('INSERT INTO description (descriptionid,postid,title,employeegender,priceperhour,estimatedtime,joblocation,jobdate) VALUES (?,?,?,?,?,?,?,?)', [shortid.generate(),postid,job.title,job.gender,job.priceperhour,job.estimatedtime,job.joblocation,job.jobdate],function (err, rows, fields) {
-                if (err){
-                    callback(err);
-                }else{
-                    //dbconnection.connection.end();
-                    //console.log(rows[0]);
+         
+                    
+                   // console.log(rows);
                     callback(null,rows[0]);
-                }
-              })  
+               
          }
        })  
     }else{

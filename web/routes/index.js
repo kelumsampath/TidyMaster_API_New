@@ -163,13 +163,18 @@ router.post('/job/jobpost',token.verifytoken,(req,res)=>{
   //console.log(req.body);
   const job={
     customerid:"aaa",
+    catid:'CAT001',
     status:"pending",
     title:req.body.jobtitle,
+    levelofjob:'easy',
     gender:req.body.gender,
+    numberofcleaners:'4',
     priceperhour:req.body.priceperhour,
     estimatedtime:req.body.estimatedtime,
+    timeforstartjob:'7.30',
     joblocation:req.body.joblocation,
-    jobdate:req.body.jobdate
+    jobdate:req.body.jobdate,
+    paymentstatus:'N'
   }
   jobmodel.jobsave(job,(err,msg)=>{
     if(err) {
