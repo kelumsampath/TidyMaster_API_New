@@ -227,7 +227,9 @@ router.post('/job/getalljobs',(req,res)=>{
  router.post('/admin/acceptpost',(req,res)=>{
    const postdata={
      "postid":req.body.postid,
-     "status":"accepted"
+     "status":"accepted",
+     "adminid":'A001',
+     "reason":req.body.reason
    }
    //console.log(postdata)
    
@@ -244,10 +246,10 @@ router.post('/job/getalljobs',(req,res)=>{
  router.post('/admin/rejectpost',(req,res)=>{
   const postdata={
     "postid":req.body.postid,
-    "status":"rejected"
+    "status":"rejected",
+    "adminid":'A001',
+    "reason":req.body.reason
   }
-  //console.log(postdata)
-  
  jobmodel.changepoststatus(postdata,(err,msg)=>{
    if(err) {
      //console.log(err);
@@ -261,10 +263,10 @@ router.post('/job/getalljobs',(req,res)=>{
 router.post('/admin/pendingpost',(req,res)=>{
   const postdata={
     "postid":req.body.postid,
-    "status":"pending"
+    "status":"pending",
+    "adminid":'A001',
+    "reason":req.body.reason
   }
-  //console.log(postdata)
-  
  jobmodel.changepoststatus(postdata,(err,msg)=>{
    if(err) {
      //console.log(err);
@@ -274,7 +276,6 @@ router.post('/admin/pendingpost',(req,res)=>{
    }
  }) 
 });
-
 
 
 module.exports = router;

@@ -76,7 +76,7 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.changepoststatus=function(postdata,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('UPDATE jobrequestpost SET status=? WHERE postid=?', [postdata.status,postdata.postid],function (err, rows, fields) {
+        dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.adminid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
             if (err){
                 callback(err);
             }else{
