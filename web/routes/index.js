@@ -133,7 +133,14 @@ router.post('/login',(req,res)=>{
 router.get('/profile',token.verifytoken,(req,res)=>{
   var userdata = req.user;
   //console.log(req.session);
-  res.json(userdata);
+  datamodelds.searchUser(userdata.username,(err,user)=>{
+    if(err) {
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:false,userdata:user});
+    }
+  })
+ // res.json(userdata);
 
 });
 
