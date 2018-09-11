@@ -166,10 +166,10 @@ router.get('/logout',token.verifytoken,(req,res)=>{
 });
 
 router.post('/job/jobpost',token.verifytoken,(req,res)=>{
- // console.log(req.user);
+ //console.log(req.body.timeforstart);
   //console.log(req.body);
   const job={
-    customerid:"aaa",
+    customerid:req.user.uid,
     catid:'CAT001',
     status:"pending",
     title:req.body.jobtitle,
@@ -178,7 +178,7 @@ router.post('/job/jobpost',token.verifytoken,(req,res)=>{
     numberofcleaners:req.body.numberofcleaners,
     priceperhour:req.body.priceperhour,
     estimatedtime:req.body.estimatedtime,
-    timeforstartjob:req.body.timeforstartjob,
+    timeforstartjob:req.body.timeforstart,
     joblocation:req.body.joblocation,
     jobdate:req.body.jobdate,
     paymentstatus:'N'
