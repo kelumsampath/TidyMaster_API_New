@@ -10,7 +10,12 @@ const mysql = require('mysql')
 
 const app = express();
 const port = process.env.PORT || 3000;
-const user = require('./web/routes');
+const index = require('./web/routes');
+const user = require('./web/routes/user');
+const admin = require('./web/routes/admin');
+const customer = require('./web/routes/customer');
+const cleaner = require('./web/routes/cleaner');
+const addprovider = require('./web/routes/addprovider');
 const config = require('./config/database');
 const database=require('./datamodels/dbconnect');
 http.createServer(app).listen(port,(err)=>{
@@ -41,7 +46,12 @@ app.get('/',(req,res)=>{
   res.send("Hello App!");
 });*/
 
-app.use('/',user);
+app.use('/',index);
+app.use('/user',user);
+app.use('/customer',customer);
+app.use('/cleaner',cleaner);
+app.use('/admin',admin);
+app.use('/addprovider',addprovider);
 
 app.use(passport.initialize());
 app.use(passport.session());
