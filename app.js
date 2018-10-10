@@ -16,6 +16,7 @@ const admin = require('./web/routes/admin');
 const customer = require('./web/routes/customer');
 const cleaner = require('./web/routes/cleaner');
 const addprovider = require('./web/routes/addprovider');
+const specialuser = require('./web/routes/specialuser');
 const config = require('./config/database');
 const database=require('./datamodels/dbconnect');
 http.createServer(app).listen(port,(err)=>{
@@ -52,6 +53,7 @@ app.use('/customer',customer);
 app.use('/cleaner',cleaner);
 app.use('/admin',admin);
 app.use('/addprovider',addprovider);
+app.use('/specialuser',specialuser);
 
 app.use(passport.initialize());
 app.use(passport.session());
