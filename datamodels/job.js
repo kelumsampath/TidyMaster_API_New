@@ -88,3 +88,18 @@ module.exports.jobsave=function(job,callback){
            callback(err);
        }   
  }
+
+ module.exports.findcustomeralljobs=function(user,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('CALL getcustomerjobs(?)', [user.uid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,fields);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
