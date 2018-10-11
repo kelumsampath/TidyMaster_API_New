@@ -36,6 +36,19 @@ router.get('/',(req,res)=>{
        }else{   
        res.send({state:true,msg:"sdsdss"});
        }
-     })
-     
+     }) 
    });
+
+  router.post('/viewcusjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomeralljobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
