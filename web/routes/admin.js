@@ -79,7 +79,7 @@ router.get('/',(req,res)=>{
 
   router.post('/isadmin',token.verifytoken,(req,res)=>{
     var userdata = req.user;
-    console.log(userdata)
+    //console.log(userdata)
     if(userdata.role=="admin"){
       res.send({state:true,msg:"this is a admin user "});
     }else{
