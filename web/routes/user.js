@@ -22,11 +22,17 @@ router.get('/',(req,res)=>{
       genpassword=pass;
     })
    const regUser = {
-      fullname:req.body.fullname,
+      firstname:req.body.firstname,
+      lastname:req.body.lastname,
       username:req.body.username,
       email:req.body.email,
-      phoneno:req.body.phoneno,
-      password:genpassword
+      nic:req.body.nic,
+      photoId:"toBeAdd",
+      gender:req.body.gender,
+      telephone:req.body.phoneno,
+      password:genpassword,
+      role:req.body.role,
+      address:req.body.address
     };
     //console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
