@@ -83,12 +83,13 @@ router.post('/login',(req,res)=>{
             //console.log({user});
            // res.json({state:true,msg:"Username, password mached!"});
            const obj = { uid: user.uid,
-            fullname:user.fullname,
+            firstname:user.firstName,
             username:user.username,
             email:user.email,
-            phoneno:user.phoneno,
-            password:user.password,
+            phoneno:user.telephone,
+            role:user.rolename,
              };
+             //console.log(obj)
         const newtoken = jwt.sign(obj,token.secrete,(err,newtoken)=>{
           if(err) {
             res.json({state:false,msg:"server error occured!!"});
@@ -113,11 +114,8 @@ router.post('/login',(req,res)=>{
                   state:true,
                   token:"Bearer "+newtoken,
                   user:{
-                    id: user._id,
-                    fullname:user.fullname,
-                    username:user.username,
-                    email:user.email,
-                    phoneno:user.phoneno,
+                    id: user.uid,
+                    role:user.rolename
                   }
                 });
               }
