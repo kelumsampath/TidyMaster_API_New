@@ -5,6 +5,8 @@ const datamodelds = require('../../datamodels/user');
 const tokenmodels = require('../../datamodels/token');
 const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
+const email=require('./../../thirdparty/sendgrid');
+const genaratePassword = require('../../thirdparty/genarate-password');
 
 module.exports = router;
 
@@ -14,12 +16,23 @@ router.get('/',(req,res)=>{
 
   router.post('/register',(req,res)=>{
     //console.log(req.body);
+    var genpassword;
+    genaratePassword.genaratepass((pass)=>{
+      console.log(pass);
+      genpassword=pass;
+    })
    const regUser = {
-      fullname:req.body.fullname,
+      firstname:req.body.firstname,
+      lastname:req.body.lastname,
       username:req.body.username,
       email:req.body.email,
-      phoneno:req.body.phoneno,
-      password:req.body.password
+      nic:req.body.nic,
+      photoId:"toBeAdd",
+      gender:req.body.gender,
+      telephone:req.body.phoneno,
+      password:genpassword,
+      role:req.body.role,
+      address:req.body.address
     };
     //console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
@@ -34,7 +47,18 @@ router.get('/',(req,res)=>{
       
         
       }else{
-        res.json({state:true,msg:"data inserted!"})
+        var userdata={
+          email:regUser.email,
+          username:regUser.username,
+          password:genpassword
+        }
+        email.unamepasssend(userdata,(err,resp)=>{
+          if(err){
+            res.json({state:false,msg:"Server Error!!"});
+          }else{
+              res.json({state:true,msg:"Your password has been send to the email!"});
+            }
+          })
       }
     })
   });
@@ -59,12 +83,13 @@ router.post('/login',(req,res)=>{
             //console.log({user});
            // res.json({state:true,msg:"Username, password mached!"});
            const obj = { uid: user.uid,
-            fullname:user.fullname,
+            firstname:user.firstName,
             username:user.username,
             email:user.email,
-            phoneno:user.phoneno,
-            password:user.password,
+            phoneno:user.telephone,
+            role:user.rolename,
              };
+             //console.log(obj)
         const newtoken = jwt.sign(obj,token.secrete,(err,newtoken)=>{
           if(err) {
             res.json({state:false,msg:"server error occured!!"});
@@ -89,11 +114,8 @@ router.post('/login',(req,res)=>{
                   state:true,
                   token:"Bearer "+newtoken,
                   user:{
-                    id: user._id,
-                    fullname:user.fullname,
-                    username:user.username,
-                    email:user.email,
-                    phoneno:user.phoneno,
+                    id: user.uid,
+                    role:user.rolename
                   }
                 });
               }

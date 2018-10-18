@@ -2,6 +2,7 @@
 const bcrypt = require('bcryptjs');
 const dbconnection = require('./dbconnect');
 const shortid = require('shortid');
+var mydate = require('current-date');
 //const schema = mongoose.Schema;
 
 
@@ -27,7 +28,7 @@ module.exports.dbSave = function(regUser,callback){
                 }else{
                    // regUser.save(err, callback);
                    if(dbconnection.connection){ 
-                    dbconnection.connection.query('INSERT INTO user ( uid,username, password, email, telephone,firstName) VALUES (?,?,?,?,?,?)', [shortid.generate(),regUser.username, regUser.password, regUser.email, regUser.phoneno , regUser.fullname],function (err, rows, fields) {
+                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(),regUser.role, regUser.username, regUser.password, regUser.email , regUser.nic, regUser.photoId, regUser.telephone , regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()],function (err, rows, fields) {
                         if (err){
                             callback(err);
                         }else{
@@ -52,7 +53,7 @@ module.exports.searchUser = function(username,callback){
    // const query = {username:username};
    // datamodels.findOne(query,callback);
    if(dbconnection.connection){ 
-    dbconnection.connection.query('SELECT * FROM user WHERE username=?', [username],function (err, rows, fields) {
+    dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid AND username=?', [username],function (err, rows, fields) {
         if (err){
             callback(err);
         }else{
