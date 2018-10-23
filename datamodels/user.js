@@ -53,7 +53,7 @@ module.exports.searchUser = function(username,callback){
    // const query = {username:username};
    // datamodels.findOne(query,callback);
    if(dbconnection.connection){ 
-    dbconnection.connection.query('SELECT * FROM user WHERE username=?', [username],function (err, rows, fields) {
+    dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid AND username=?', [username],function (err, rows, fields) {
         if (err){
             callback(err);
         }else{
