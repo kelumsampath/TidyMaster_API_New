@@ -81,9 +81,19 @@ router.get('/',(req,res)=>{
     var userdata = req.user;
     //console.log(userdata)
     if(userdata.role=="admin"){
-      res.send({state:true,msg:"this is a admin user "});
+      res.send({state:true,role:"admin",msg:"this is a admin user "});
+    }else if(userdata.role=="superadmin"){
+      res.send({state:true,role:"admin",msg:"this is a superadmin user "});
     }else{
       res.send({state:false,msg:"this is not a admin user "});
     }
   });
   
+  router.post('/issuperadmin',token.verifytoken,(req,res)=>{
+    var userdata = req.user;
+    if(userdata.role=="superadmin"){
+      res.send({state:true,msg:"this is a superadmin user "});
+    }else{
+      res.send({state:false,msg:"this is not a superadmin user "});
+    }
+  });
