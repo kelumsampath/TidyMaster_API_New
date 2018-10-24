@@ -37,3 +37,12 @@ router.get('/',(req,res)=>{
      }
    }) 
   });
+  router.post('/iscleaner',token.verifytoken,(req,res)=>{
+    var userdata = req.user;
+    //console.log(userdata)
+    if(userdata.role=="cleaner"){
+      res.send({state:true,msg:"this is a cleaner "});
+    }else{
+      res.send({state:false,msg:"this is not a cleaner "});
+    }
+  });
