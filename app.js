@@ -15,7 +15,7 @@ const user = require('./web/routes/user');
 const admin = require('./web/routes/admin');
 const customer = require('./web/routes/customer');
 const cleaner = require('./web/routes/cleaner');
-const addprovider = require('./web/routes/addprovider');
+const advertiser = require('./web/routes/advertiser');
 const specialuser = require('./web/routes/specialuser');
 const config = require('./config/database');
 const database=require('./datamodels/dbconnect');
@@ -52,7 +52,7 @@ app.use('/user',user);
 app.use('/customer',customer);
 app.use('/cleaner',cleaner);
 app.use('/admin',admin);
-app.use('/addprovider',addprovider);
+app.use('/advertiser',advertiser);
 app.use('/specialuser',specialuser);
 
 app.use(passport.initialize());
