@@ -73,3 +73,16 @@ router.post('/getAllAds',(req,res)=>{
    }
  }) 
 });
+
+router.post('/getDailyViews',(req,res)=>{
+  //console.log(req.body.postid)
+
+  venderadmodel.getDailyViews(req.body.adId,(err,job)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,ad:ad});
+   }
+ }) 
+});

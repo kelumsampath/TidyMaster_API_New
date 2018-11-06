@@ -19,3 +19,18 @@ module.exports.getAllAds=function(callback){
            callback(err);
        }   
  }
+
+ module.exports.getDailyViews=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT noOfApears,date FROM dailyappears WHERE adId=?', [adId],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+              
+                callback(null,rows);
+            }                  
+          })  
+       }else{
+           callback(err);
+       }   
+ }
