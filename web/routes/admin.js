@@ -100,7 +100,7 @@ router.get('/',(req,res)=>{
     }
   });
 
-  router.post('/registerAdvertiser',token.verifytokenaccess,(req,res)=>{
+  router.post('/specialuser',token.verifytokenaccess,(req,res)=>{
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
       console.log(pass);
@@ -118,10 +118,10 @@ router.get('/',(req,res)=>{
       password:genpassword,
       role:req.body.role,
       address:req.body.address,
-      company:req.body.company
+      company:req.body.company 
     };
     //console.log(regUser);
-    datamodelds.dbSaveadvertiser(regUser,(err,user)=>{
+    datamodelds.dbSavespecialuser(regUser,(err,user)=>{
       if(err){
         
           if (err.code === 'ER_DUP_ENTRY' ) {
