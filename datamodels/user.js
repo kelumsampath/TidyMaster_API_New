@@ -65,6 +65,28 @@ module.exports.matchpassword = function (password, hash, callback) {
     });
 }
 
+module.exports.dbSaveadvertiser = function (regUser, callback) {
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(regUser.password, salt, function (err, hash) {
+            regUser.password = hash;
+            if (err) {
+                throw err;
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('call addadvertiser(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate(),regUser.company], function (err, rows, fields) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+};
 
 
 module.exports.searchUser;

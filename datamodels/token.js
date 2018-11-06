@@ -53,3 +53,20 @@ module.exports.revokeToken = function(token,callback){
             callback(err);
         }
 }; 
+
+
+module.exports.checkroleaccess = function(accessdata,callback){ 
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM role ro,resourcerole rr,resource re WHERE ro.roleid=rr.roleid AND re.resourceid=rr.resourceid AND ro.rolename=? AND re.resourcename=?', [accessdata.role,accessdata.resource],function (err, rows, fields) {
+            if (err){               
+                callback(err);
+            }else{      
+                //console.log(rows[0])        
+                callback(null,rows[0]);
+            }              
+          })  
+        }else{       
+            callback(err);
+        }
+}; 
+
