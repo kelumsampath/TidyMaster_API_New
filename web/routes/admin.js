@@ -125,7 +125,7 @@ router.get('/',(req,res)=>{
       if(err){
         
           if (err.code === 'ER_DUP_ENTRY' ) {
-              console.log('There was a duplicate key error');
+              //console.log('There was a duplicate key error');
               res.json({state:false,msg:"Duplicate user name error!"})
           }else{
             res.json({state:false,msg:"server error occured!!"});
