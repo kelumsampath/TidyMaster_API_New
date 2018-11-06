@@ -86,3 +86,16 @@ router.post('/getDailyViews',(req,res)=>{
    }
  }) 
 });
+
+router.post('/getAllAdsByMonth',(req,res)=>{
+  //console.log(req.body.postid)
+
+  venderadmodel.getAllAdsByMonth(req.body.adproviderid,(err,job)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,ad:ad});
+   }
+ }) 
+});
