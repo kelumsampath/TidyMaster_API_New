@@ -12,11 +12,11 @@ router.get('/',(req,res)=>{
   });
 
   router.post('/jobpost',token.verifytoken,(req,res)=>{
-    // console.log(req.user);
+    //console.log(req.user);
      //console.log(req.body);
      const job={
-       customerid:"aaa",
-       catid:'CAT001',
+       username:req.user.username,
+       catname:req.body.catname,
        status:"pending",
        title:req.body.jobtitle,
        levelofjob:req.body.levelofjob,
@@ -39,7 +39,7 @@ router.get('/',(req,res)=>{
      }) 
    });
 
-  router.post('/viewcusjob',token.verifytoken,(req,res)=>{
+router.post('/viewcusjob',token.verifytoken,(req,res)=>{
     const user = {
       uid:req.user.uid
     }
@@ -52,3 +52,7 @@ router.get('/',(req,res)=>{
       }
     })
   })
+
+
+
+  
