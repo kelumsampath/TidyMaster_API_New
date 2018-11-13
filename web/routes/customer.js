@@ -39,6 +39,9 @@ router.get('/',(req,res)=>{
      }) 
    });
 
+
+   // get all the jobs put by customer 
+
 router.post('/viewcusjob',token.verifytoken,(req,res)=>{
     const user = {
       uid:req.user.uid
@@ -53,6 +56,35 @@ router.post('/viewcusjob',token.verifytoken,(req,res)=>{
     })
   })
 
+  // find customer active job 
+
+router.post('/viewactivejob',token.verifytoken,(req,res)=>{
+  const user = {
+    uid:req.user.uid
+  }
+  jobmodel.findcustomeractivejobs(user,(err,jobs)=>{
+    if(err){
+      console.log(err);
+      res.send({state:false,msg:"db error"});
+    }else{
+      res.send({state:true,customerjobs:jobs});
+    }
+  })
+})
 
 
-  
+  // get details of singhe job
+
+  router.post('/singlejob',token.verifytoken,(req,res)=>{
+    const job = {
+      jobid:req.user.jobid
+    }
+    jobmodel.findcustomeractivejobs(job,(err,job)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:job});
+      }
+    })
+  })
