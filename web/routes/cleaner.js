@@ -37,6 +37,24 @@ router.get('/',(req,res)=>{
      }
    }) 
   });
+
+
+  router.post('/applyjob',token.verifytoken,(req,res)=>{
+   // console.log(req.body.jobid);
+   // console.log(req.user);
+   const user = {
+     uid:req.user.uid,
+     jobid:req.user.jobid
+   }
+    jobmodel.applyforjob(user,(err,res)=>{
+      if(err){
+        res.send({state:false,msg:"Server error"}); 
+      }else{
+        res.send({state:true,msg:"successfully apply for the jobid "})
+    }
+  })
+});
+
   router.post('/iscleaner',token.verifytoken,(req,res)=>{
     var userdata = req.user;
     //console.log(userdata)
@@ -46,3 +64,4 @@ router.get('/',(req,res)=>{
       res.send({state:false,msg:"this is not a cleaner "});
     }
   });
+
