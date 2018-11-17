@@ -6,11 +6,13 @@ const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
+const cloudinary=require('./../../thirdparty/cloudinary');
 
 module.exports = router;
 
 router.get('/',(req,res)=>{
-    res.send("Hello admin!");
+  
+    res.send("Hello admin!"); 
   });
 
   router.post('/adminalljobs',(req,res)=>{
@@ -101,6 +103,13 @@ router.get('/',(req,res)=>{
   });
 
   router.post('/specialuser',token.verifytokenaccess,(req,res)=>{
+    var public_id,url;
+    cloudinary.defaultuser((callb)=>{
+      //console.log(callb.public_id)
+      //console.log(callb.url)
+      public_id=callb.public_id;
+      url=callb.url;
+
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
       console.log(pass);
@@ -112,7 +121,7 @@ router.get('/',(req,res)=>{
       username:req.body.username,
       email:req.body.email,
       nic:req.body.nic,
-      photoId:"toBeAdd",
+      photoId:public_id,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,
@@ -147,4 +156,5 @@ router.get('/',(req,res)=>{
           })
       }
     })
+  })
   });
