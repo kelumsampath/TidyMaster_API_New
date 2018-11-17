@@ -135,7 +135,7 @@ module.exports.jobsave=function(job,callback){
     }
  }
 
- // Customer's completed job 
+ // Customer's completed jobs 
 
  module.exports.findcustomercompletedjobs=function(user,callback){
     if(dbconnection.connection){
