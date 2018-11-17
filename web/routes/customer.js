@@ -15,8 +15,8 @@ router.get('/',(req,res)=>{
     // console.log(req.user);
      //console.log(req.body);
      const job={
-       customerid:"aaa",
-       catid:'CAT001',
+       uid:req.user.uid,
+       catogaryname:req.body.catogaryname,
        status:"pending",
        title:req.body.jobtitle,
        levelofjob:req.body.levelofjob,
