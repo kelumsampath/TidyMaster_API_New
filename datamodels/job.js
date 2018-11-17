@@ -119,11 +119,27 @@ module.exports.jobsave=function(job,callback){
  }
 
 
- // Customer's active job   ( query need help)
+ // Customer's active job 
 
  module.exports.findcustomeractivejobs=function(user,callback){
     if(dbconnection.connection){
         dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d,job j,customer cu WHERE jr.postid=d.postid AND jr.postid!=j.postid AND jr.customerid=cu.customerid AND cu.uid=?',[user.uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // Customer's completed job 
+
+ module.exports.findcustomercompletedjobs=function(user,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d,job j,customer cu WHERE jr.postid=d.postid AND jr.postid=j.postid AND jr.customerid=cu.customerid AND cu.uid=?',[user.uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
