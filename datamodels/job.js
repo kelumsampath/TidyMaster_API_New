@@ -3,9 +3,10 @@ const shortid = require('shortid');
 var mydate = require('current-date');
 
 module.exports.jobsave=function(job,callback){
+    //console.log(job)
       if(dbconnection.connection){ 
       const postid = shortid.generate();
-     dbconnection.connection.query('call saveAPost(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [postid,job.customerid,job.catid,mydate('full', '-', ':'),mydate('full', '-', ':'),job.status,shortid.generate(),job.title,job.levelofjob,job.gender,job.priceperhour,job.estimatedtime,job.numberofcleaners,job.joblocation,job.jobdate,job.timeforstartjob,job.paymentstatus],function (err, rows, fields) {
+     dbconnection.connection.query('call savejobpost(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [postid,job.uid,job.catogaryname,mydate('full', '-', ':'),mydate('full', '-', ':'),job.status,shortid.generate(),job.title,job.levelofjob,job.gender,job.priceperhour,job.estimatedtime,job.numberofcleaners,job.joblocation,job.jobdate,job.timeforstartjob,job.paymentstatus],function (err, rows, fields) {
          if (err){
              callback(err);
          }else{
