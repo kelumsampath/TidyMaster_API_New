@@ -105,8 +105,8 @@ router.get('/',(req,res)=>{
   router.post('/specialuser',token.verifytokenaccess,(req,res)=>{
     var public_id,url;
     cloudinary.defaultuser((callb)=>{
-      console.log(callb.public_id)
-      console.log(callb.url)
+      //console.log(callb.public_id)
+      //console.log(callb.url)
       public_id=callb.public_id;
       url=callb.url;
 
