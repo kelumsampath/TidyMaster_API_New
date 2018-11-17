@@ -123,11 +123,11 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.findcustomeractivejobs=function(user,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d,job j,customer cu WHERE jr.postid=d.postid AND jr.postid!=j.postid AND jr.customerid=cu.customerid AND cu.uid=?',[user.uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
-                callback(null,fields);
+                callback(null,rows);
             }
         })
     }else{
