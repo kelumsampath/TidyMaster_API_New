@@ -84,6 +84,8 @@ module.exports.jobsave=function(job,callback){
        }   
  }
 
+ // All job view for given customer
+
  module.exports.findcustomeralljobs=function(user,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('CALL getcustomerjobs(?)', [user.uid],function (err, rows, fields) {
@@ -98,3 +100,55 @@ module.exports.jobsave=function(job,callback){
            callback(err);
        }  
  }
+
+ // Apply for job 
+
+ module.exports.applyforjob=function(user,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('INSERT INTO Application (ApplicationID, date, time,cleanerID,postID) VALUES (?,?,?,?)',[shortid.generate(),mydate('date'),mydate('time'),user.uid,user.jobid],function(err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,fields);
+            }      
+          })
+       }else{
+           callback(err);
+       }
+ }
+
+
+ // Customer's active job   ( query need help)
+
+ module.exports.findcustomeractivejobs=function(user,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,fields);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // get details of singhe job ( need help for query )
+
+ module.exports.singlejob=function(job,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,fields);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+

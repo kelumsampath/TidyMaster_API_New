@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const datamodelds = require('../../datamodels/user');
 const tokenmodels = require('../../datamodels/token');
-const jobmodel = require('../../datamodels/job')
+const venderadmodel = require('../../datamodels/vendorAd')
 const token = require('../../config/token');
 
 module.exports = router;
@@ -59,4 +59,43 @@ router.post('/adadvertiser', (req, res) => {
       })
     }
   })
+});
+
+router.post('/getAllAds',(req,res)=>{
+  //console.log(req.body.postid)
+
+  venderadmodel.getAllAds(req.body.adproviderid,(err,job)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,ad:ad});
+   }
+ }) 
+});
+
+router.post('/getDailyViews',(req,res)=>{
+  //console.log(req.body.postid)
+
+  venderadmodel.getDailyViews(req.body.adId,(err,job)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,ad:ad});
+   }
+ }) 
+});
+
+router.post('/getAllAdsByMonth',(req,res)=>{
+  //console.log(req.body.postid)
+
+  venderadmodel.getAllAdsByMonth(req.body.adproviderid,(err,job)=>{
+   if(err) {
+     //console.log(err);
+     res.send({state:false,msg:"Server error"});
+   }else{   
+   res.send({state:true,ad:ad});
+   }
+ }) 
 });
