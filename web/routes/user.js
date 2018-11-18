@@ -45,7 +45,7 @@ router.get('/',(req,res)=>{
     //console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
-        
+        cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               console.log('There was a duplicate key error');
               res.json({state:false,msg:"Duplicate user name error!"})
@@ -53,7 +53,7 @@ router.get('/',(req,res)=>{
             res.json({state:false,msg:"server error occured!!"});
           } 
       
-        
+        })
       }else{
         var userdata={
           email:regUser.email,

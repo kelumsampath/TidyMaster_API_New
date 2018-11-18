@@ -22,3 +22,9 @@ module.exports.defaultuser=(callback)=>{
             callback(data)
     })
 }
+
+module.exports.deleteimage=(public_id,callback)=>{
+cloudinary.uploader.destroy(public_id, function(result){
+    callback(result);
+})
+}
