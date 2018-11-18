@@ -132,14 +132,14 @@ router.get('/',(req,res)=>{
     //console.log(regUser);
     datamodelds.dbSavespecialuser(regUser,(err,user)=>{
       if(err){
-        
+        cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               //console.log('There was a duplicate key error');
               res.json({state:false,msg:"Duplicate user name error!"})
           }else{
             res.json({state:false,msg:"server error occured!!"});
           } 
-      
+        })
         
       }else{
         var userdata={
