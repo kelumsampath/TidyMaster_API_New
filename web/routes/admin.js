@@ -158,3 +158,21 @@ router.get('/',(req,res)=>{
     })
   })
   });
+
+  router.post('/profpic',token.verifytoken,(req,res)=>{
+    var userdata = req.user;
+    datamodelds.searchUser(userdata.username,(err,user)=>{
+      if(err){
+        res.json({state:false,msg:"Server Error!!"});
+      }else{
+        cloudinary.getimageurl(user.photoId,(call)=>{
+          var data={
+            url:call,
+            username:userdata.username
+          }
+          res.json({state:true,data:data});
+        })
+        
+      }
+    })
+  });

@@ -28,3 +28,10 @@ cloudinary.uploader.destroy(public_id, function(result){
     callback(result);
 })
 }
+
+module.exports.getimageurl=(public_id,callback)=>{
+    const img =cloudinary.url(public_id, { secure: true, width: 100, 
+        height: 100, crop: 'fill' })
+    //console.log(img)
+    callback(img);
+}
