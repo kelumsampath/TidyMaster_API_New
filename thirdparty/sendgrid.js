@@ -1,4 +1,4 @@
-const apikey="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";
+const apikey="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";
 var helper = require('sendgrid').mail;
 var fromEmail = new helper.Email('tidymaster@gmail.com');
 
@@ -15,8 +15,9 @@ module.exports.unamepasssend=function(userdata,callback){
         });
         sg.API(request, function (error, response) {
         if (error) {
-            callback(err);
+            callback(error);
         }else{
+            //console.log(response)
             callback(null,response);
         }
             

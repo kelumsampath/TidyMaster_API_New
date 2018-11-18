@@ -13,16 +13,12 @@ cloudinary.config({
 
 module.exports.defaultuser=(callback)=>{
     const filepath='assets/defualt.jpg'
-    cloudinary.uploader.upload(filepath,function(err,result) {
+    cloudinary.uploader.upload(filepath,function(result) {
         //console.log(result);
-        if(err){
-            callback(err);
-        }else{
             var data={
                 public_id:result.public_id,
                 url:result.url
             }
-            callback(null,data)
-        }
+            callback(data)
     })
 }
