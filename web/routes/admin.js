@@ -27,7 +27,7 @@ router.get('/',(req,res)=>{
     }) 
    });
 
-   router.post('/acceptpost',token.verifytoken,(req,res)=>{
+   router.post('/acceptpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"accepted",
@@ -46,7 +46,7 @@ router.get('/',(req,res)=>{
    }) 
   });
 
-  router.post('/rejectpost',token.verifytoken,(req,res)=>{
+  router.post('/rejectpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"rejected",
@@ -64,7 +64,7 @@ router.get('/',(req,res)=>{
   });
   
 
-  router.post('/pendingpost',token.verifytoken,(req,res)=>{
+  router.post('/pendingpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"pending",
