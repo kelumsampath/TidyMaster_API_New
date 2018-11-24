@@ -15,8 +15,8 @@ router.get('/',(req,res)=>{
     //console.log(req.user);
      //console.log(req.body);
      const job={
-       username:req.user.username,
-       catname:req.body.catname,
+       uid:req.user.uid,
+       catogaryname:req.body.catogaryname,
        status:"pending",
        title:req.body.jobtitle,
        levelofjob:req.body.levelofjob,
@@ -71,6 +71,22 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
     }
   })
 })
+
+  // find customer completed job 
+
+  router.post('/viewcompletedjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomercompletedjobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
 
 
   // get details of singhe job

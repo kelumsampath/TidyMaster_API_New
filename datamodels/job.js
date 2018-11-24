@@ -3,9 +3,10 @@ const shortid = require('shortid');
 var mydate = require('current-date');
 
 module.exports.jobsave=function(job,callback){
+    //console.log(job)
       if(dbconnection.connection){ 
       const postid = shortid.generate();
-     dbconnection.connection.query('call saveAPost(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [postid,job.customerid,job.catid,mydate('full', '-', ':'),mydate('full', '-', ':'),job.status,shortid.generate(),job.title,job.levelofjob,job.gender,job.priceperhour,job.estimatedtime,job.numberofcleaners,job.joblocation,job.jobdate,job.timeforstartjob,job.paymentstatus],function (err, rows, fields) {
+     dbconnection.connection.query('call savejobpost(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [postid,job.uid,job.catogaryname,mydate('full', '-', ':'),mydate('full', '-', ':'),job.status,shortid.generate(),job.title,job.levelofjob,job.gender,job.priceperhour,job.estimatedtime,job.numberofcleaners,job.joblocation,job.jobdate,job.timeforstartjob,job.paymentstatus],function (err, rows, fields) {
          if (err){
              callback(err);
          }else{
@@ -70,7 +71,7 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.changepoststatus=function(postdata,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.adminid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
+        dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.uid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
             if (err){
                 callback(err);
             }else{
@@ -118,15 +119,31 @@ module.exports.jobsave=function(job,callback){
  }
 
 
- // Customer's active job   ( query need help)
+ // Customer's active job 
 
  module.exports.findcustomeractivejobs=function(user,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d,job j,customer cu WHERE jr.postid=d.postid AND jr.postid!=j.postid AND jr.customerid=cu.customerid AND cu.uid=?',[user.uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
-                callback(null,fields);
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // Customer's completed jobs 
+
+ module.exports.findcustomercompletedjobs=function(user,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d,job j,customer cu WHERE jr.postid=d.postid AND jr.postid=j.postid AND jr.customerid=cu.customerid AND cu.uid=?',[user.uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
             }
         })
     }else{

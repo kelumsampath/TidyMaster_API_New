@@ -7,6 +7,7 @@ const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
+const cloudinary=require('./../../thirdparty/cloudinary');
 
 module.exports = router;
 
@@ -16,6 +17,13 @@ router.get('/',(req,res)=>{
 
   router.post('/register',(req,res)=>{
     //console.log(req.body);
+    var public_id,url;
+    cloudinary.defaultuser((callb)=>{
+      //console.log(callb.public_id)
+      //console.log(callb.url)
+      public_id=callb.public_id;
+      url=callb.url;
+  
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
       console.log(pass);
@@ -27,7 +35,7 @@ router.get('/',(req,res)=>{
       username:req.body.username,
       email:req.body.email,
       nic:req.body.nic,
-      photoId:"toBeAdd",
+      photoId:public_id,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,
@@ -37,7 +45,7 @@ router.get('/',(req,res)=>{
     //console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
-        
+        cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               console.log('There was a duplicate key error');
               res.json({state:false,msg:"Duplicate user name error!"})
@@ -45,7 +53,7 @@ router.get('/',(req,res)=>{
             res.json({state:false,msg:"server error occured!!"});
           } 
       
-        
+        })
       }else{
         var userdata={
           email:regUser.email,
@@ -61,6 +69,7 @@ router.get('/',(req,res)=>{
           })
       }
     })
+  })
   });
 
 router.post('/login',(req,res)=>{

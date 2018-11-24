@@ -6,11 +6,13 @@ const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
+const cloudinary=require('./../../thirdparty/cloudinary');
 
 module.exports = router;
 
 router.get('/',(req,res)=>{
-    res.send("Hello admin!");
+  
+    res.send("Hello admin!"); 
   });
 
   router.post('/adminalljobs',(req,res)=>{
@@ -25,11 +27,11 @@ router.get('/',(req,res)=>{
     }) 
    });
 
-   router.post('/acceptpost',(req,res)=>{
+   router.post('/acceptpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"accepted",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
     //console.log(postdata)
@@ -44,11 +46,11 @@ router.get('/',(req,res)=>{
    }) 
   });
 
-  router.post('/rejectpost',(req,res)=>{
+  router.post('/rejectpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"rejected",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
    jobmodel.changepoststatus(postdata,(err,msg)=>{
@@ -62,11 +64,11 @@ router.get('/',(req,res)=>{
   });
   
 
-  router.post('/pendingpost',(req,res)=>{
+  router.post('/pendingpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"pending",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
    jobmodel.changepoststatus(postdata,(err,msg)=>{
@@ -101,6 +103,13 @@ router.get('/',(req,res)=>{
   });
 
   router.post('/specialuser',token.verifytokenaccess,(req,res)=>{
+    var public_id,url;
+    cloudinary.defaultuser((callb)=>{
+      //console.log(callb.public_id)
+      //console.log(callb.url)
+      public_id=callb.public_id;
+      url=callb.url;
+
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
       console.log(pass);
@@ -112,7 +121,7 @@ router.get('/',(req,res)=>{
       username:req.body.username,
       email:req.body.email,
       nic:req.body.nic,
-      photoId:"toBeAdd",
+      photoId:public_id,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,
@@ -123,14 +132,14 @@ router.get('/',(req,res)=>{
     //console.log(regUser);
     datamodelds.dbSavespecialuser(regUser,(err,user)=>{
       if(err){
-        
+        cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               //console.log('There was a duplicate key error');
               res.json({state:false,msg:"Duplicate user name error!"})
           }else{
             res.json({state:false,msg:"server error occured!!"});
           } 
-      
+        })
         
       }else{
         var userdata={
@@ -145,6 +154,25 @@ router.get('/',(req,res)=>{
               res.json({state:true,msg:"Your password has been send to the email!"});
             }
           })
+      }
+    })
+  })
+  });
+
+  router.post('/profpic',token.verifytoken,(req,res)=>{
+    var userdata = req.user;
+    datamodelds.searchUser(userdata.username,(err,user)=>{
+      if(err){
+        res.json({state:false,msg:"Server Error!!"});
+      }else{
+        cloudinary.getimageurl(user.photoId,(call)=>{
+          var data={
+            url:call,
+            username:userdata.username
+          }
+          res.json({state:true,data:data});
+        })
+        
       }
     })
   });
