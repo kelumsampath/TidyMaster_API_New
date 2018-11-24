@@ -27,11 +27,11 @@ router.get('/',(req,res)=>{
     }) 
    });
 
-   router.post('/acceptpost',(req,res)=>{
+   router.post('/acceptpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"accepted",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
     //console.log(postdata)
@@ -46,11 +46,11 @@ router.get('/',(req,res)=>{
    }) 
   });
 
-  router.post('/rejectpost',(req,res)=>{
+  router.post('/rejectpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"rejected",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
    jobmodel.changepoststatus(postdata,(err,msg)=>{
@@ -64,11 +64,11 @@ router.get('/',(req,res)=>{
   });
   
 
-  router.post('/pendingpost',(req,res)=>{
+  router.post('/pendingpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
       "postid":req.body.postid,
       "status":"pending",
-      "adminid":'A001',
+      "adminid":req.user.uid,
       "reason":req.body.reason
     }
    jobmodel.changepoststatus(postdata,(err,msg)=>{
