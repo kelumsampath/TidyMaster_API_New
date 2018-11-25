@@ -10,6 +10,16 @@ const mysql = require('mysql')
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const server = http.createServer((req, res) => {
+res.statusCode = 200;
+res.setHeader('Content-Type', 'text/html');
+res.end('<h1>Hello World</h1>');
+});
+server.listen(port,() => {
+console.log(`Server running at port `+port);
+});
+
 const index = require('./web/routes');
 const user = require('./web/routes/user');
 const admin = require('./web/routes/admin');
