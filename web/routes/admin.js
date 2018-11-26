@@ -26,6 +26,17 @@ router.get('/',(req,res)=>{
       }
     }) 
    });
+   router.post('/adminjobsbystatus',(req,res)=>{
+ 
+    jobmodel.adminjobsbystatus(req.body.status,(err,jobs)=>{
+      if(err) {
+        //console.log(err);
+        res.send({state:false,msg:"Server error"});
+      }else{   
+      res.send({state:true,jobs:jobs});
+      }
+    }) 
+   });
 
    router.post('/acceptpost',token.verifytokenaccess,(req,res)=>{
     const postdata={
