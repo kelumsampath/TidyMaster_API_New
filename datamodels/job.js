@@ -153,13 +153,13 @@ module.exports.jobsave=function(job,callback){
 
  // get details of singhe job ( need help for query )
 
- module.exports.singlejob=function(job,callback){
+ module.exports.singlejob=function(jobid,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[jobid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
-                callback(null,fields);
+                callback(null,rows);
             }
         })
     }else{
