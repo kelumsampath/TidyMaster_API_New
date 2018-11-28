@@ -62,7 +62,7 @@ module.exports.searchwebusers = function(username,callback){
              callback(err);
          }else{
              //dbconnection.connection.end();
-             console.log(rows);
+             //console.log(rows);
              callback(null,rows);
          }
        
