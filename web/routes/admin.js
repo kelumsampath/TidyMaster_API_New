@@ -198,3 +198,14 @@ router.post('/searchusers', token.verifytoken, (req, res) => {
    }
  })
 });
+
+router.post('/removeuser', token.verifytokenaccess, (req, res) => {
+  datamodelds.removeuser(req.body.uid,(err,users)=>{
+    if(err){
+     res.json({ state: false, msg: "Server Error!!" });
+    }else{
+      //console.log(users.length)
+     res.json({ state: true,msg:"user removed" });
+    }
+  })
+ });

@@ -109,5 +109,24 @@ module.exports.dbSavespecialuser = function (regUser, callback) {
     });
 };
 
+module.exports.removeuser = function(uid,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('DELETE FROM user WHERE uid=?', [uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
 
 module.exports.searchUser;
