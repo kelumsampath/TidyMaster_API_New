@@ -18,3 +18,5 @@ module.exports.dbconfigdata = {
     user     : 'sql12255438',
     password : 'LIEY6al2fJ',
     database : 'sql12255438'*/
+
+    // http://13.59.12.142:3306
