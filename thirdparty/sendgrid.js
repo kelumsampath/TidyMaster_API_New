@@ -45,3 +45,25 @@ module.exports.removeuser=function(userdata,callback){
         
     });
 }
+
+module.exports.warnuser=function(userdata,callback){
+    var toEmail = new helper.Email(userdata.email);
+    var subject = 'TIDYMASTER';
+    var content = new helper.Content('text/plain', 'Hi '+userdata.username+'! Warning! you have warning from admin, massage: '+userdata.reason);
+    var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+    var sg = require('sendgrid')(apikey);
+    var request = sg.emptyRequest({
+        method: 'POST',
+        path: '/v3/mail/send',
+        body: mail.toJSON()
+    });
+    sg.API(request, function (error, response) {
+    if (error) {
+        callback(error);
+    }else{
+        //console.log(response)
+        callback(null,response);
+    }
+        
+    });
+}

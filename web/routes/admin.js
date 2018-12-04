@@ -223,7 +223,7 @@ router.post('/removeuser', token.verifytokenaccess, (req, res) => {
           if (err) {
             res.json({ state: false, msg: "Server Error1!!" });
           } else {
-            email.removeuser(req.user, (err, resp) => {
+            email.removeuser(user, (err, resp) => {
               if (err) {
                 res.json({ state: false, msg: "Server Error2!!" });
               } else {
@@ -243,6 +243,17 @@ router.post('/warnuser', token.verifytoken, (req, res) => {
     uid: req.body.uid,
     reason: req.body.reason
   }
-  console.log(user)
-  //warn should be completed
+  datamodelds.searchUserById(req.body.uid, (err, user) => {
+    if (err) {
+
+    } else {
+  email.warnuser(user, (err, resp) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
+      res.json({ state: true, msg: "warning email sent to the user!" });
+    }
+  })
+}
+  });
 });
