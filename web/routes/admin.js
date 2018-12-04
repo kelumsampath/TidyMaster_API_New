@@ -189,49 +189,60 @@ router.post('/profpic', token.verifytoken, (req, res) => {
 });
 
 router.post('/searchusers', token.verifytokenaccess, (req, res) => {
- datamodelds.searchwebusers(req.body.username,(err,users)=>{
-   if(err){
-    res.json({ state: false, msg: "Server Error!!" });
-   }else{
-     //console.log(users.length)
-    res.json({ state: true,usercount:users.length, users: users });
-   }
- })
+  datamodelds.searchwebusers(req.body.username, (err, users) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
+      //console.log(users.length)
+      res.json({ state: true, usercount: users.length, users: users });
+    }
+  })
 });
 
 router.post('/searchusersmob', token.verifytokenaccess, (req, res) => {
-  datamodelds.searchwebusersall(req.body.username,(err,users)=>{
-    if(err){
-     res.json({ state: false, msg: "Server Error!!" });
-    }else{
+  datamodelds.searchwebusersall(req.body.username, (err, users) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
       //console.log(users.length)
-     res.json({ state: true,usercount:users.length, users: users });
+      res.json({ state: true, usercount: users.length, users: users });
     }
   })
- });
+});
 
 router.post('/removeuser', token.verifytokenaccess, (req, res) => {
-  console.log(req.user)
-  datamodelds.removeuser(req.body.uid,(err,users)=>{
-    if(err){
-     res.json({ state: false, msg: "Server Error!!" });
-    }else{
-      email.removeuser(req.user,(err,resp)=>{
-        if(err){
-          res.json({state:false,msg:"Server Error!!"});
-        }else{
-            res.json({state:true,msg:"user successfuly removed!"});
+  //console.log(req.user)
+  datamodelds.searchUserById(req.body.uid, (err, user) => {
+    if (err) {
+
+    } else {
+      if (req.user.role == 'admin' && (user.rolename == 'admin' || user.rolename == 'superadmin')) {
+        res.json({ state: false, msg: "No permision to delete that user!" });
+      } else {
+        datamodelds.removeuser(req.body.uid, (err, users) => {
+          if (err) {
+            res.json({ state: false, msg: "Server Error1!!" });
+          } else {
+            email.removeuser(req.user, (err, resp) => {
+              if (err) {
+                res.json({ state: false, msg: "Server Error2!!" });
+              } else {
+                res.json({ state: true, msg: "user successfuly removed!" });
+              }
+            })
           }
         })
+      }
     }
   })
- });
 
- router.post('/warnuser', token.verifytoken, (req, res) => {
-   var user={
-     uid:req.body.uid,
-     reason:req.body.reason
-   }
-   console.log(user)
- //warn should be completed
- });
+});
+
+router.post('/warnuser', token.verifytoken, (req, res) => {
+  var user = {
+    uid: req.body.uid,
+    reason: req.body.reason
+  }
+  console.log(user)
+  //warn should be completed
+});
