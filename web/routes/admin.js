@@ -239,15 +239,12 @@ router.post('/removeuser', token.verifytokenaccess, (req, res) => {
 });
 
 router.post('/warnuser', token.verifytoken, (req, res) => {
-  var user = {
-    uid: req.body.uid,
-    reason: req.body.reason
-  }
+  
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
 
     } else {
-  email.warnuser(user, (err, resp) => {
+  email.warnuser(user,req.body.reason, (err, resp) => {
     if (err) {
       res.json({ state: false, msg: "Server Error!!" });
     } else {
