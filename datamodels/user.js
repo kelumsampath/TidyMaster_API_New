@@ -72,6 +72,26 @@ module.exports.searchwebusers = function(username,callback){
         callback(err);
     }
  }; 
+
+ module.exports.searchwebusersall = function(username,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid',[],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
  
 
 

@@ -188,7 +188,7 @@ router.post('/profpic', token.verifytoken, (req, res) => {
   })
 });
 
-router.post('/searchusers', token.verifytoken, (req, res) => {
+router.post('/searchusers', token.verifytokenaccess, (req, res) => {
  datamodelds.searchwebusers(req.body.username,(err,users)=>{
    if(err){
     res.json({ state: false, msg: "Server Error!!" });
@@ -198,6 +198,17 @@ router.post('/searchusers', token.verifytoken, (req, res) => {
    }
  })
 });
+
+router.post('/searchusersmob', token.verifytokenaccess, (req, res) => {
+  datamodelds.searchwebusersall(req.body.username,(err,users)=>{
+    if(err){
+     res.json({ state: false, msg: "Server Error!!" });
+    }else{
+      //console.log(users.length)
+     res.json({ state: true,usercount:users.length, users: users });
+    }
+  })
+ });
 
 router.post('/removeuser', token.verifytokenaccess, (req, res) => {
   datamodelds.removeuser(req.body.uid,(err,users)=>{
