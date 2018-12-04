@@ -211,12 +211,27 @@ router.post('/searchusersmob', token.verifytokenaccess, (req, res) => {
  });
 
 router.post('/removeuser', token.verifytokenaccess, (req, res) => {
+  console.log(req.user)
   datamodelds.removeuser(req.body.uid,(err,users)=>{
     if(err){
      res.json({ state: false, msg: "Server Error!!" });
     }else{
-      //console.log(users.length)
-     res.json({ state: true,msg:"user removed" });
+      email.removeuser(req.user,(err,resp)=>{
+        if(err){
+          res.json({state:false,msg:"Server Error!!"});
+        }else{
+            res.json({state:true,msg:"user successfuly removed!"});
+          }
+        })
     }
   })
+ });
+
+ router.post('/warnuser', token.verifytoken, (req, res) => {
+   var user={
+     uid:req.body.uid,
+     reason:req.body.reason
+   }
+   console.log(user)
+ //warn should be completed
  });
