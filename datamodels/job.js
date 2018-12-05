@@ -69,6 +69,21 @@ module.exports.jobsave=function(job,callback){
        }   
  }
 
+ module.exports.adminjobsbystatus=function(status,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j,category c WHERE d.postid=j.postid AND j.categoryid=c.categoryid AND j.status=?', [status],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
  module.exports.changepoststatus=function(postdata,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.uid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
