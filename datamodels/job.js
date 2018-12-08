@@ -120,8 +120,9 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.applyforjob=function(user,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('INSERT INTO Application (ApplicationID, date, time,cleanerID,postID) VALUES (?,?,?,?)',[shortid.generate(),mydate('date'),mydate('time'),user.uid,user.jobid],function(err, rows, fields) {
+        dbconnection.connection.query('call applyjob(?,?,?,?)',[shortid.generate(),user.jobid,user.uid,mydate('date')],function(err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
