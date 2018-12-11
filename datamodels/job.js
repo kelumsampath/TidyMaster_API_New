@@ -120,8 +120,9 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.applyforjob=function(user,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('INSERT INTO Application (ApplicationID, date, time,cleanerID,postID) VALUES (?,?,?,?)',[shortid.generate(),mydate('date'),mydate('time'),user.uid,user.jobid],function(err, rows, fields) {
+        dbconnection.connection.query('call applyjob(?,?,?,?)',[shortid.generate(),user.jobid,user.uid,mydate('date')],function(err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
@@ -168,6 +169,7 @@ module.exports.jobsave=function(job,callback){
 
  // get details of singhe job ( need help for query )
 
+
  module.exports.singlejob=function(jobid,callback){
     if(dbconnection.connection){
         dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[jobid],function(err,rows,fields){
@@ -182,4 +184,50 @@ module.exports.jobsave=function(job,callback){
     }
  }
 
+ // view all unchecked complains
+
+ module.exports.viewcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain WHERE status="pending"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // view all checked complains
+ module.exports.viewcheckedcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain c,action a WHERE a.complainid=c.complainid AND status="reviewed"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ //complain action save
+ module.exports.complaineduseraction=function(complaindata,callback){
+     //console.log(complaindata.uid)
+    if(dbconnection.connection){
+        dbconnection.connection.query('CALL reviewcomplain(?,?,?,?,?)',[shortid.generate(),complaindata.uid,complaindata.complainid,complaindata.action,mydate('full', '-', ':')],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
 

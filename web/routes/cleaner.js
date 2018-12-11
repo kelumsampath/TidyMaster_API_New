@@ -41,10 +41,10 @@ router.get('/',(req,res)=>{
 
   router.post('/applyjob',token.verifytoken,(req,res)=>{
    // console.log(req.body.jobid);
-   // console.log(req.user);
+    console.log(req.user);
    const user = {
      uid:req.user.uid,
-     jobid:req.user.jobid
+     jobid:req.body.jobid
    }
     jobmodel.applyforjob(user,(err,res)=>{
       if(err){
@@ -53,6 +53,7 @@ router.get('/',(req,res)=>{
         res.send({state:true,msg:"successfully apply for the jobid "})
     }
   })
+  
 });
 
   router.post('/iscleaner',token.verifytoken,(req,res)=>{
@@ -65,3 +66,4 @@ router.get('/',(req,res)=>{
     }
   });
 
+  
