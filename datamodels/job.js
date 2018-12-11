@@ -202,7 +202,23 @@ module.exports.jobsave=function(job,callback){
  // view all checked complains
  module.exports.viewcheckedcomplains=function(complain,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM complain WHERE status="reviewed"',[],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM complain c,action a WHERE a.complainid=c.complainid AND status="reviewed"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ //complain action save
+ module.exports.complaineduseraction=function(complaindata,callback){
+     //console.log(complaindata.uid)
+    if(dbconnection.connection){
+        dbconnection.connection.query('CALL reviewcomplain(?,?,?,?,?)',[shortid.generate(),complaindata.uid,complaindata.complainid,complaindata.action,mydate('full', '-', ':')],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
