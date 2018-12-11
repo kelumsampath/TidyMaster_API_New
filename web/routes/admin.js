@@ -239,18 +239,40 @@ router.post('/removeuser', token.verifytokenaccess, (req, res) => {
 });
 
 router.post('/warnuser', token.verifytoken, (req, res) => {
-  
+
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
 
     } else {
-  email.warnuser(user,req.body.reason, (err, resp) => {
+      email.warnuser(user, req.body.reason, (err, resp) => {
+        if (err) {
+          res.json({ state: false, msg: "Server Error!!" });
+        } else {
+          res.json({ state: true, msg: "warning email sent to the user!" });
+        }
+      })
+    }
+  });
+});
+
+router.post('/viewuncheckedcomplains',(req, res) => {
+
+  jobmodel.viewcomplains("dd",(err, complain) => {
     if (err) {
       res.json({ state: false, msg: "Server Error!!" });
     } else {
-      res.json({ state: true, msg: "warning email sent to the user!" });
+      res.json({ state: true, complains:complain });
     }
-  })
-}
+  });
+});
+
+router.post('/viewcheckedcomplains',(req, res) => {
+
+  jobmodel.viewcheckedcomplains("dd",(err, complain) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
+      res.json({ state: true, complains:complain });
+    }
   });
 });

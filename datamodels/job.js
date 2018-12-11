@@ -169,13 +169,13 @@ module.exports.jobsave=function(job,callback){
 
  // get details of singhe job ( need help for query )
 
- module.exports.singlejob=function(job,callback){
+ module.exports.singlejob=function(uid,callback){
     if(dbconnection.connection){
         dbconnection.connection.query('need help for query',[],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
-                callback(null,fields);
+                callback(null,rows);
             }
         })
     }else{
@@ -183,4 +183,34 @@ module.exports.jobsave=function(job,callback){
     }
  }
 
+ // view all unchecked complains
+
+ module.exports.viewcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain WHERE status="pending"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // view all checked complains
+ module.exports.viewcheckedcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain WHERE status="reviewed"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
 
