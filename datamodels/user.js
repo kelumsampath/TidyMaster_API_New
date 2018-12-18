@@ -190,3 +190,26 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+ module.exports.editpassword = function(userpass,callback){
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(userpass.newpassword, salt, function (err, hash) {
+            var pass= hash;
+            if (err) {
+                throw err;
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('UPDATE user SET password=? WHERE uid=?', [pass,userpass.uid], function (err, rows, fields) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+ }; 

@@ -200,3 +200,46 @@ router.post('/editprofile',token.verifytoken,(req,res)=>{
 
 });
 
+router.post('/editpassword',token.verifytoken,(req,res)=>{
+  //console.log(req.user)
+  const mypass = {
+    uid:req.user.uid,
+    oldpassword:req.body.oldpassword,
+    newpassword:req.body.newpassword
+  };
+
+  datamodelds.searchUserById(mypass.uid,function(err,user){
+    if(err){
+      res.json({state:false,msg:"server error occured!!"});
+      }
+
+    if(user){
+      //console.log(user);
+      datamodelds.matchpassword(mypass.oldpassword,user.password,function(err,match){
+        if(err) {
+          res.json({state:false,msg:"server error occured!!"});
+        }
+        if(match){
+          datamodelds.editpassword(mypass,(err,resp)=>{
+            if(err){
+              res.json({state:false,msg:"User password does not changed!"});
+            }else{
+              res.json({state:true,msg:"User password changed!"});
+            }
+          })
+        }else{
+          res.json({state:false,msg:"Wrong password!"});
+        }
+      })
+      
+    }else{
+      res.json({state:false,msg:"No user found!"});
+    }
+  })
+
+  
+
+});
+
+
+
