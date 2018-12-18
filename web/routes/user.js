@@ -178,3 +178,25 @@ router.post('/login',(req,res)=>{
   
 });
 
+router.post('/editprofile',token.verifytoken,(req,res)=>{
+  const userdata = {
+    uid:req.user.uid,
+    firstname:req.body.firstname,
+    lastname:req.body.lastname,
+    username:req.body.username,
+    email:req.body.email,
+    nic:req.body.nic,
+    gender:req.body.gender,
+    telephone:req.body.phoneno,
+    address:req.body.address
+  };
+  datamodelds.editprofile(userdata,(err,user)=>{
+    if(err){
+      res.json({state:false,msg:"User profile not edited!"});
+    }else{
+      res.json({state:true,msg:"User profile edited!"});
+    }
+  })
+
+});
+
