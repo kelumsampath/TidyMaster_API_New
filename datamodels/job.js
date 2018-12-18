@@ -170,6 +170,7 @@ module.exports.jobsave=function(job,callback){
  // get details of singhe job ( need help for query )
 
 
+
  module.exports.singlejob=function(jobid,callback){
     if(dbconnection.connection){
         dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[jobid],function(err,rows,fields){
@@ -177,6 +178,7 @@ module.exports.jobsave=function(job,callback){
                 callback(err);
             }else{
                 callback(null,rows);
+
             }
         })
     }else{
@@ -193,6 +195,7 @@ module.exports.jobsave=function(job,callback){
                 callback(err);
             }else{
                 callback(null,rows);
+
             }
         })
     }else{
