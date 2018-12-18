@@ -51,6 +51,8 @@ module.exports.searchUser = function(username,callback){
        callback(err);
    }
 }; 
+ 
+module.exports.searchUser;
 
 module.exports.searchUserById = function(uid,callback){
     // const query = {username:username};
@@ -169,5 +171,22 @@ module.exports.removeuser = function(uid,callback){
     }
  }; 
 
- 
-module.exports.searchUser;
+
+ module.exports.editprofile = function(userdata,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('UPDATE user SET firstname=? , lastname=?, username=?, email=?, nic=?, gender=?, telephone=?, address=? WHERE uid=?', [userdata.firstname,userdata.lastname,userdata.username,userdata.email,userdata.nic,userdata.gender,userdata.telephone,userdata.address,userdata.uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
