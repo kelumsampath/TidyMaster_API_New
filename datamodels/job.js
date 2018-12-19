@@ -36,6 +36,42 @@ module.exports.jobsave=function(job,callback){
        }   
  }
 
+ module.exports.getallpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="Y" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.getallnonpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="N" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
  module.exports.viewjob=function(postid,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.postid=?', [postid],function (err, rows, fields) {
