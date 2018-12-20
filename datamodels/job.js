@@ -156,7 +156,7 @@ module.exports.jobsave=function(job,callback){
 
  module.exports.applyforjob=function(applydata,callback){
      //console.log(applydata.postid+' '+applydata.uid)
-    console.log(shortid.generate()+" " +applydata.postid+" " +applydata.uid+" " +mydate('date'))
+   // console.log(shortid.generate()+" " +applydata.postid+" " +applydata.uid+" " +mydate('date'))
     if(dbconnection.connection){ 
         dbconnection.connection.query('call applyjob(?,?,?,?)',[applydata.uid,mydate('date'),applydata.postid,shortid.generate()],function(err, rows, fields) {
             if (err){
