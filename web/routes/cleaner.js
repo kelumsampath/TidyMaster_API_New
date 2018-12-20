@@ -41,16 +41,16 @@ router.post('/viewjob', (req, res) => {
 
 router.post('/applyjob', token.verifytoken, (req, res) => {
   // console.log(req.body.jobid);
-  console.log(req.user);
-  const user = {
+  //console.log(req.user);
+  const applydata = {
     uid: req.user.uid,
-    jobid: req.body.jobid
+    postid: req.body.postid
   }
-  jobmodel.applyforjob(user, (err, res) => {
+  jobmodel.applyforjob(applydata, (err, user) => {
     if (err) {
       res.send({ state: false, msg: "Server error" });
     } else {
-      res.send({ state: true, msg: "successfully apply for the jobid " })
+      res.send({ state: true, msg: "successfully apply for the jobid " });
     }
   })
 
