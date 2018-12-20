@@ -154,15 +154,17 @@ module.exports.jobsave=function(job,callback){
 
  // Apply for job 
 
- module.exports.applyforjob=function(user,callback){
+ module.exports.applyforjob=function(applydata,callback){
+     //console.log(applydata.postid+' '+applydata.uid)
+    console.log(shortid.generate()+" " +applydata.postid+" " +applydata.uid+" " +mydate('date'))
     if(dbconnection.connection){ 
-        dbconnection.connection.query('call applyjob(?,?,?,?)',[shortid.generate(),user.jobid,user.uid,mydate('date')],function(err, rows, fields) {
+        dbconnection.connection.query('call applyjob(?,?,?,?)',[applydata.uid,mydate('date'),applydata.postid,shortid.generate()],function(err, rows, fields) {
             if (err){
                 console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
-                callback(null,fields);
+                callback(null,rows);
             }      
           })
        }else{
