@@ -36,10 +36,8 @@ if(err){
   console.log("Database connected"); 
 }
 });*/
-app.use(express.static(path.join(__dirname+"/public")));
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
-  });
+
+app.use(express.static(path.join(__dirname,"public")));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
