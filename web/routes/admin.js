@@ -371,22 +371,27 @@ router.post('/getalladproviders', (req, res) => {
 });
 
 router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, (req, res) => {
-  var detailsofadd = {
-    uid: req.user.uid,
-    title: req.body.title,
-    venderurl: req.body.venderurl,
-    advertiser: req.body.advertiser,
-    startdate: req.body.startdate,
-    imageid:"sdsa",
-    enddate: req.body.enddate
-  }
-  // console.log(detailsofadd)
-  advertismentmodel.postadd(detailsofadd, (err, msg) => {
-    if (err) {
-      res.json({ state: false, msg: "Server Error!!" });
-    } else {
-      res.json({ state: true });
+
+  cloudinary.postadd((callb)=>{
+   
+    var detailsofadd = {
+      uid: req.user.uid,
+      title: req.body.title,
+      venderurl: req.body.venderurl,
+      advertiser: req.body.advertiser,
+      startdate: req.body.startdate,
+      imageid:callb.public_id,
+      enddate: req.body.enddate
     }
+    // console.log(detailsofadd)
+    advertismentmodel.postadd(detailsofadd, (err, msg) => {
+      if (err) {
+        res.json({ state: false, msg: "Server Error!!" });
+      } else {
+        res.json({ state: true, msg: "Advertisment saved!" });
+      }
+    })
+  
   })
 
 });
