@@ -213,3 +213,23 @@ module.exports.removeuser = function(uid,callback){
         });
     });
  }; 
+
+ 
+ module.exports.getalladproviders = function(nodata,callback){
+    
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT username FROM user u, advertiestmentprovider a WHERE u.uid=a.uid',[],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+            // console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
