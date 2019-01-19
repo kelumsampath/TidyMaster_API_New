@@ -209,9 +209,9 @@ module.exports.jobsave=function(job,callback){
 
 
 
- module.exports.singlejob=function(jobid,callback){
+ module.exports.singlejob=function(postid,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[jobid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[postid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
