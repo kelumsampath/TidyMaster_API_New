@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const datamodelds = require('../../datamodels/user');
 const tokenmodels = require('../../datamodels/token');
+const advertismentmodel = require('../../datamodels/advertisment');
 const jobmodel = require('../../datamodels/job')
 const token = require('../../config/token');
 const email = require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
 const cloudinary = require('./../../thirdparty/cloudinary');
-var multer  = require('multer')
+var multer = require('multer')
 //var upload = multer({ dest: 'uploads/' })
 
-const storage = multer.diskStorage({ 
-  destination: function(req,file,callback){
-    callback(null,'./uploads/');
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads/');
   },
-  filename: function(req,file,callback){
-    callback(null,"advertisment.jpg");
+  filename: function (req, file, callback) {
+    callback(null, "advertisment.jpg");
   }
 });
 const upload = multer({ storage: storage })
@@ -369,13 +370,23 @@ router.post('/getalladproviders', (req, res) => {
   });
 });
 
-router.post('/postadd',upload.single('addvertiesment'),token.verifyfiletoken,(req, res) => {
-  var detailsofadd={
-    uid:req.user.uid,
-    title:req.body.title,
-    venderurl:req.body.venderurl,
-    advertiser:req.body.advertiser
+router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, (req, res) => {
+  var detailsofadd = {
+    uid: req.user.uid,
+    title: req.body.title,
+    venderurl: req.body.venderurl,
+    advertiser: req.body.advertiser,
+    startdate: req.body.startdate,
+    imageid:"sdsa",
+    enddate: req.body.enddate
   }
-  console.log(detailsofadd)
-  res.json({ state: true});
+  // console.log(detailsofadd)
+  advertismentmodel.postadd(detailsofadd, (err, msg) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
+      res.json({ state: true });
+    }
+  })
+
 });
