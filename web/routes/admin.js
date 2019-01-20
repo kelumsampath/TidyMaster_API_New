@@ -383,7 +383,7 @@ router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, 
       imageid:callb.public_id,
       enddate: req.body.enddate
     }
-     console.log(detailsofadd)
+     //console.log(detailsofadd)
     advertismentmodel.postadd(detailsofadd, (err, msg) => {
       if (err) {
         res.json({ state: false, msg: "Server Error!!" });
@@ -396,7 +396,7 @@ router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, 
 
 });
 
-router.post('/getadvetisments', (req, res) => {
+router.post('/getadvetisments',token.verifytoken, (req, res) => {
 
   advertismentmodel.getadvetisments("dd", (err, advertisments) => {
     if (err) {
@@ -405,4 +405,18 @@ router.post('/getadvetisments', (req, res) => {
       res.json({ state: true, advertisments: advertisments });
     }
   });
+});
+
+router.post('/deletead',token.verifytoken, (req, res) => {
+  //console.log(req.body.imageId)
+  cloudinary.deleteimage(req.body.imageId,(callb)=>{
+    advertismentmodel.deletead(req.body.adid, (err, resp) => {
+      if (err) {
+        res.json({ state: false, msg: "Server Error!!" });
+      } else {
+        res.json({ state: true, msg:"Advertiesment deleted!"  });
+      }
+    });
+  })
+  
 });

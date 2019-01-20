@@ -36,3 +36,19 @@ module.exports.postadd=function(detailsofadd,callback){
       callback(err);
   }
 }; 
+
+module.exports.deletead=function(adid,callback){
+   
+    if(dbconnection.connection){ 
+   dbconnection.connection.query('DELETE FROM verndoradvertiestment WHERE adid=?', [adid],function (err, rows, fields) {
+       if (err){
+           //console.log(err)
+           callback(err);
+       }else{
+          callback(null,rows);           
+       }
+     })  
+  }else{
+      callback(err);
+  }
+}; 
