@@ -6,12 +6,13 @@ module.exports.postadd=function(detailsofadd,callback){
    
       if(dbconnection.connection){ 
       const adid = shortid.generate();
-     // console.log(detailsofadd)
+     //console.log(adid)
      dbconnection.connection.query('call postadvertisment(?,?,?,?,?,?,?,?)', [adid,detailsofadd.advertiser,detailsofadd.uid,detailsofadd.title,detailsofadd.venderurl,detailsofadd.imageid,detailsofadd.startdate,detailsofadd.enddate],function (err, rows, fields) {
          if (err){
-             //console.log(err)
+           // console.log(err)
              callback(err);
          }else{
+           // console.log(rows)
             callback(null,rows);           
          }
        })  
@@ -19,3 +20,35 @@ module.exports.postadd=function(detailsofadd,callback){
         callback(err);
     }
  }; 
+
+ module.exports.getadvetisments=function(dd,callback){
+   
+    if(dbconnection.connection){ 
+   dbconnection.connection.query('SELECT * FROM verndoradvertiestment v,advertiestmentprovider ad WHERE v.adproviderid=ad.adproviderid', [],function (err, rows, fields) {
+       if (err){
+           //console.log(err)
+           callback(err);
+       }else{
+          callback(null,rows);           
+       }
+     })  
+  }else{
+      callback(err);
+  }
+}; 
+
+module.exports.deletead=function(adid,callback){
+   
+    if(dbconnection.connection){ 
+   dbconnection.connection.query('DELETE FROM verndoradvertiestment WHERE adid=?', [adid],function (err, rows, fields) {
+       if (err){
+           //console.log(err)
+           callback(err);
+       }else{
+          callback(null,rows);           
+       }
+     })  
+  }else{
+      callback(err);
+  }
+}; 
