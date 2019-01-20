@@ -12,11 +12,11 @@ router.get('/',(req,res)=>{
   });
 
   router.post('/jobpost',token.verifytoken,(req,res)=>{
-    // console.log(req.user);
+    //console.log(req.user);
      //console.log(req.body);
      const job={
-       customerid:"aaa",
-       catid:'CAT001',
+       uid:req.user.uid,
+       catogaryname:req.body.catogaryname,
        status:"pending",
        title:req.body.jobtitle,
        levelofjob:req.body.levelofjob,
@@ -36,6 +36,69 @@ router.get('/',(req,res)=>{
        }else{   
        res.send({state:true,msg:"sdsdss"});
        }
-     })
-     
+     }) 
    });
+
+
+   // get all the jobs put by customer 
+
+router.post('/viewcusjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomeralljobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+  // find customer active job 
+
+router.post('/viewactivejob',token.verifytoken,(req,res)=>{
+  const user = {
+    uid:req.user.uid
+  }
+  jobmodel.findcustomeractivejobs(user,(err,jobs)=>{
+    if(err){
+      console.log(err);
+      res.send({state:false,msg:"db error"});
+    }else{
+      res.send({state:true,customerjobs:jobs});
+    }
+  })
+})
+
+  // find customer completed job 
+
+  router.post('/viewcompletedjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomercompletedjobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+
+  // get details of singhe job
+
+  router.post('/singlejob',(req,res)=>{
+    
+    jobmodel.singlejob(req.body.postid,(err,job)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:job});
+      }
+    })
+  })
