@@ -377,13 +377,13 @@ router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, 
     var detailsofadd = {
       uid: req.user.uid,
       title: req.body.title,
-      venderurl: req.body.venderurl,
+      venderurl: callb.url,
       advertiser: req.body.advertiser,
       startdate: req.body.startdate,
       imageid:callb.public_id,
       enddate: req.body.enddate
     }
-    // console.log(detailsofadd)
+     console.log(detailsofadd)
     advertismentmodel.postadd(detailsofadd, (err, msg) => {
       if (err) {
         res.json({ state: false, msg: "Server Error!!" });
@@ -394,4 +394,15 @@ router.post('/postadd', upload.single('addvertiesment'), token.verifyfiletoken, 
   
   })
 
+});
+
+router.post('/getadvetisments', (req, res) => {
+
+  advertismentmodel.getadvetisments("dd", (err, advertisments) => {
+    if (err) {
+      res.json({ state: false, msg: "Server Error!!" });
+    } else {
+      res.json({ state: true, advertisments: advertisments });
+    }
+  });
 });
