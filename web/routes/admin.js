@@ -420,3 +420,17 @@ router.post('/deletead',token.verifytoken, (req, res) => {
   })
   
 });
+
+router.post('/userprofile',token.verifytoken,(req,res)=>{
+  //var userdata = req.user;
+  //console.log(req.session);
+  datamodelds.searchUser(req.body.username,(err,user)=>{
+    if(err) {
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:false,userdata:user});
+    }
+  })
+ // res.json(userdata);
+
+});
