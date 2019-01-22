@@ -102,3 +102,13 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   })
+
+  router.post('/iscustomer', token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(userdata)
+    if (userdata.role == "customer") {
+      res.send({ state: true, msg: "this is a customer " });
+    } else {
+      res.send({ state: false, msg: "this is not a customer " });
+    }
+  });
