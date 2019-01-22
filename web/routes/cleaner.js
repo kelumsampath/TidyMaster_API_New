@@ -114,3 +114,15 @@ router.post('/getappliedjobs',token.verifytoken, (req, res) => {
     }
   })
 });
+
+router.post('/getdonejobs',token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  jobmodel.getcleanerdonejobs(userdata.uid,(err, jobs) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, jobs: jobs });
+    }
+  })
+});
