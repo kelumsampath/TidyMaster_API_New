@@ -91,9 +91,9 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
 
   // get details of singhe job
 
-  router.post('/singlejob',token.verifytoken,(req,res)=>{
+  router.post('/singlejob',(req,res)=>{
     
-    jobmodel.singlejob(req.body.jobid,(err,job)=>{
+    jobmodel.singlejob(req.body.postid,(err,job)=>{
       if(err){
         console.log(err);
         res.send({state:false,msg:"db error"});
