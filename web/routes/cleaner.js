@@ -126,3 +126,17 @@ router.post('/getdonejobs',token.verifytoken, (req, res) => {
     }
   })
 });
+
+  // get details of singhe job
+
+  router.post('/singlejob',(req,res)=>{
+    
+    jobmodel.singlejob(req.body.postid,(err,job)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:job});
+      }
+    })
+  })
