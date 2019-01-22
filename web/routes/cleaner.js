@@ -90,3 +90,15 @@ router.post('/getallnonpaidjobs', (req, res) => {
     }
   })
 });
+
+router.post('/getallpaidjobs', (req, res) => {
+
+  jobmodel.getallpaidjobs((err, jobs) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, jobs: jobs });
+    }
+  })
+});
