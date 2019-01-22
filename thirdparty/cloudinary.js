@@ -23,6 +23,18 @@ module.exports.defaultuser=(callback)=>{
     })
 }
 
+module.exports.postadd=(callback)=>{
+    const filepath='uploads/advertisment.jpg'
+    cloudinary.uploader.upload(filepath,function(result) {
+        //console.log(result);
+            var data={
+                public_id:result.public_id,
+                url:result.url
+            }
+            callback(data)
+    })
+}
+
 module.exports.deleteimage=(public_id,callback)=>{
 cloudinary.uploader.destroy(public_id, function(result){
     callback(result);

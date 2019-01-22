@@ -41,16 +41,16 @@ router.post('/viewjob', (req, res) => {
 
 router.post('/applyjob', token.verifytoken, (req, res) => {
   // console.log(req.body.jobid);
-  console.log(req.user);
-  const user = {
+  //console.log(req.user);
+  const applydata = {
     uid: req.user.uid,
-    jobid: req.body.jobid
+    postid: req.body.postid
   }
-  jobmodel.applyforjob(user, (err, res) => {
+  jobmodel.applyforjob(applydata, (err, user) => {
     if (err) {
       res.send({ state: false, msg: "Server error" });
     } else {
-      res.send({ state: true, msg: "successfully apply for the jobid " })
+      res.send({ state: true, msg: "successfully apply for the jobid " });
     }
   })
 
@@ -90,3 +90,53 @@ router.post('/getallnonpaidjobs', (req, res) => {
     }
   })
 });
+
+router.post('/getallpaidjobs', (req, res) => {
+
+  jobmodel.getallpaidjobs((err, jobs) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, jobs: jobs });
+    }
+  })
+});
+
+router.post('/getappliedjobs',token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  jobmodel.getcleanerappliedjobs(userdata.uid,(err, jobs) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, jobs: jobs });
+    }
+  })
+});
+
+router.post('/getdonejobs',token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  jobmodel.getcleanerdonejobs(userdata.uid,(err, jobs) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, jobs: jobs });
+    }
+  })
+});
+
+  // get details of singhe job
+
+  router.post('/singlejob',(req,res)=>{
+    
+    jobmodel.singlejob(req.body.postid,(err,job)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:job});
+      }
+    })
+  })

@@ -64,11 +64,12 @@ router.post('/adadvertiser', (req, res) => {
 router.post('/getAllAds',(req,res)=>{
   //console.log(req.body.postid)
 
-  venderadmodel.getAllAds(req.body.adproviderid,(err,job)=>{
+  venderadmodel.getAllAds(req.body.username,(err,job)=>{
    if(err) {
      //console.log(err);
      res.send({state:false,msg:"Server error"});
    }else{   
+     console.log(adproviderid);
    res.send({state:true,ad:ad});
    }
  }) 
@@ -87,15 +88,17 @@ router.post('/getDailyViews',(req,res)=>{
  }) 
 });
 
-router.post('/getAllAdsByMonth',(req,res)=>{
-  //console.log(req.body.postid)
-
-  venderadmodel.getAllAdsByMonth(req.body.adproviderid,(err,job)=>{
+router.post('/getAllAdsByMonth',token.verifytoken,(req,res)=>{
+ 
+  var userdata = req.user;
+  console.log(userdata.username);
+  venderadmodel.getAllAdsByMonth(userdata.username,(err,active)=>{
    if(err) {
-     //console.log(err);
+  
      res.send({state:false,msg:"Server error"});
    }else{   
-   res.send({state:true,ad:ad});
+    
+   res.send({state:true,ad:active});
    }
  }) 
 });

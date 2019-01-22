@@ -72,6 +72,24 @@ module.exports.jobsave=function(job,callback){
        }   
  }
 
+ module.exports.getallpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="Y" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
  module.exports.viewjob=function(postid,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.postid=?', [postid],function (err, rows, fields) {
@@ -154,15 +172,17 @@ module.exports.jobsave=function(job,callback){
 
  // Apply for job 
 
- module.exports.applyforjob=function(user,callback){
+ module.exports.applyforjob=function(applydata,callback){
+     //console.log(applydata.postid+' '+applydata.uid)
+   // console.log(shortid.generate()+" " +applydata.postid+" " +applydata.uid+" " +mydate('date'))
     if(dbconnection.connection){ 
-        dbconnection.connection.query('call applyjob(?,?,?,?)',[shortid.generate(),user.jobid,user.uid,mydate('date')],function(err, rows, fields) {
+        dbconnection.connection.query('call applyjob(?,?,?,?)',[applydata.uid,mydate('date'),applydata.postid,shortid.generate()],function(err, rows, fields) {
             if (err){
                 console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
-                callback(null,fields);
+                callback(null,rows);
             }      
           })
        }else{
@@ -207,9 +227,9 @@ module.exports.jobsave=function(job,callback){
 
 
 
- module.exports.singlejob=function(jobid,callback){
+ module.exports.singlejob=function(postid,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[jobid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[postid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
@@ -269,4 +289,36 @@ module.exports.jobsave=function(job,callback){
         callback(err);
     }
  }
+
+ module.exports.getcleanerappliedjobs=function(uid,callback){
+   
+   if(dbconnection.connection){
+       dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, application a WHERE jr.postid=d.postid AND jr.postid=a.postid AND a.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+           if(err){
+               callback(err);
+           }else{
+               callback(null,rows);
+           }
+       })
+   }else{
+       callback(err);
+   }
+}
+
+module.exports.getcleanerdonejobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ 
 
