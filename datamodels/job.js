@@ -290,3 +290,18 @@ module.exports.jobsave=function(job,callback){
     }
  }
 
+ module.exports.getcleanerappliedjobs=function(uid,callback){
+   
+   if(dbconnection.connection){
+       dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, application a WHERE jr.postid=d.postid AND jr.postid=a.postid AND a.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+           if(err){
+               callback(err);
+           }else{
+               callback(null,rows);
+           }
+       })
+   }else{
+       callback(err);
+   }
+}
+
