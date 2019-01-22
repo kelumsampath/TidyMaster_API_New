@@ -36,6 +36,7 @@ router.get('/',(req,res)=>{
       email:req.body.email,
       nic:req.body.nic,
       photoId:public_id,
+      photourl:url,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,

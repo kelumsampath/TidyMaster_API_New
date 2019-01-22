@@ -16,7 +16,7 @@ module.exports.dbSave = function (regUser, callback) {
                 throw err;
             } else {
                 if (dbconnection.connection) {
-                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
+                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.photourl, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
                         if (err) {
                             callback(err);
                         } else {
