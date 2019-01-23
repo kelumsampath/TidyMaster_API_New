@@ -8,6 +8,17 @@ const token = require('../../config/token');
 const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
 const cloudinary=require('./../../thirdparty/cloudinary');
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads/');
+  },
+  filename: function (req, file, callback) {
+    callback(null, "aw.jpg");
+  }
+});
+const upload = multer({ storage: storage })
 
 module.exports = router;
 
@@ -26,7 +37,7 @@ router.get('/',(req,res)=>{
   
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
-      console.log(pass);
+      console.log(url);
       genpassword=pass;
     })
    const regUser = {
@@ -36,13 +47,14 @@ router.get('/',(req,res)=>{
       email:req.body.email,
       nic:req.body.nic,
       photoId:public_id,
+      photourl:url,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,
       role:req.body.role,
       address:req.body.address
     };
-    //console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
         cloudinary.deleteimage(public_id,(callbk)=>{
@@ -150,7 +162,7 @@ router.post('/login',(req,res)=>{
       if(err) {
         res.json({state:false,msg:"server error occured!!"});
       }else{
-        res.json({state:false,userdata:user});
+        res.json({state:true,userdata:user});
       }
     })
    // res.json(userdata);
@@ -177,4 +189,99 @@ router.post('/login',(req,res)=>{
     })
   
 });
+
+router.post('/editprofile',token.verifytoken,(req,res)=>{
+  const userdata = {
+    uid:req.user.uid,
+    firstname:req.body.firstname,
+    lastname:req.body.lastname,
+    username:req.body.username,
+    email:req.body.email,
+    nic:req.body.nic,
+    gender:req.body.gender,
+    telephone:req.body.phoneno,
+    address:req.body.address
+  };
+  datamodelds.editprofile(userdata,(err,user)=>{
+    if(err){
+      res.json({state:false,msg:"User profile not edited!"});
+    }else{
+      res.json({state:true,msg:"User profile edited!"});
+    }
+  })
+
+});
+
+router.post('/editpassword',token.verifytoken,(req,res)=>{
+  //console.log(req.user)
+  const mypass = {
+    uid:req.user.uid,
+    oldpassword:req.body.oldpassword,
+    newpassword:req.body.newpassword
+  };
+
+  datamodelds.searchUserById(mypass.uid,function(err,user){
+    if(err){
+      res.json({state:false,msg:"server error occured!!"});
+      }
+
+    if(user){
+      //console.log(user);
+      datamodelds.matchpassword(mypass.oldpassword,user.password,function(err,match){
+        if(err) {
+          res.json({state:false,msg:"server error occured!!"});
+        }
+        if(match){
+          datamodelds.editpassword(mypass,(err,resp)=>{
+            if(err){
+              res.json({state:false,msg:"User password does not changed!"});
+            }else{
+              res.json({state:true,msg:"User password changed!"});
+            }
+          })
+        }else{
+          res.json({state:false,msg:"Wrong password!"});
+        }
+      })
+      
+    }else{
+      res.json({state:false,msg:"No user found!"});
+    }
+  })
+});
+
+
+router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,(req,res)=>{
+  var filepath=req.file.path;
+  //console.log(req.user);
+  datamodelds.searchUser(req.user.username,(err,user)=>{
+    if(err){
+     res.json({state:false});
+    }else{
+      const oldpicid=user.photoId;
+      cloudinary.deleteimage(oldpicid,(callb)=>{
+        cloudinary.storeimage(filepath,(callb2)=>{
+          //console.log(callb2.public_id)
+          //console.log(callb2.url)
+          var updatedata={
+            uid:req.user.uid,
+            pic_id:callb2.public_id,
+            pic_url:callb2.url
+          }
+          datamodelds.profpicupdate(updatedata,(err,success)=>{
+            if(err){
+              res.json({state:false,msg:"server error occured!!"});
+            }else{
+              res.json({state:true,msg:"User profile changed!"});
+            }
+          })
+        })
+      })
+      
+    }
+  })
+  
+ });
+
+
 

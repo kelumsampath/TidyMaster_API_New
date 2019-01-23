@@ -36,6 +36,60 @@ module.exports.jobsave=function(job,callback){
        }   
  }
 
+ module.exports.getallpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="Y" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.getallnonpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="N" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.getallpaidjobs=function(callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND d.paymentstatus="Y" AND j.status=?', ["accepted"],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+                //dbconnection.connection.end();
+               // console.log(rows);
+                callback(null,rows);
+            }
+          
+            
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
  module.exports.viewjob=function(postid,callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid AND j.postid=?', [postid],function (err, rows, fields) {
@@ -57,6 +111,21 @@ module.exports.jobsave=function(job,callback){
  module.exports.adminalljobs=function(callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j WHERE d.postid=j.postid ',function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
+ module.exports.adminjobsbystatus=function(status,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j,category c WHERE d.postid=j.postid AND j.categoryid=c.categoryid AND j.status=?', [status],function (err, rows, fields) {
             if (err){
                 callback(err);
             }else{
@@ -103,14 +172,17 @@ module.exports.jobsave=function(job,callback){
 
  // Apply for job 
 
- module.exports.applyforjob=function(user,callback){
+ module.exports.applyforjob=function(applydata,callback){
+     //console.log(applydata.postid+' '+applydata.uid)
+   // console.log(shortid.generate()+" " +applydata.postid+" " +applydata.uid+" " +mydate('date'))
     if(dbconnection.connection){ 
-        dbconnection.connection.query('INSERT INTO Application (ApplicationID, date, time,cleanerID,postID) VALUES (?,?,?,?)',[shortid.generate(),mydate('date'),mydate('time'),user.uid,user.jobid],function(err, rows, fields) {
+        dbconnection.connection.query('call applyjob(?,?,?,?)',[applydata.uid,mydate('date'),applydata.postid,shortid.generate()],function(err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
-                callback(null,fields);
+                callback(null,rows);
             }      
           })
        }else{
@@ -153,13 +225,16 @@ module.exports.jobsave=function(job,callback){
 
  // get details of singhe job ( need help for query )
 
- module.exports.singlejob=function(job,callback){
+
+
+ module.exports.singlejob=function(postid,callback){
     if(dbconnection.connection){
-        dbconnection.connection.query('need help for query',[],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost j, description d, category c WHERE d.postid = j.postid AND j.categoryid=c.categoryid AND j.postid=?',[postid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
-                callback(null,fields);
+                callback(null,rows);
+
             }
         })
     }else{
@@ -167,4 +242,83 @@ module.exports.jobsave=function(job,callback){
     }
  }
 
+ // view all unchecked complains
+
+ module.exports.viewcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain WHERE status="pending"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ // view all checked complains
+ module.exports.viewcheckedcomplains=function(complain,callback){
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM complain c,action a WHERE a.complainid=c.complainid AND status="reviewed"',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ //complain action save
+ module.exports.complaineduseraction=function(complaindata,callback){
+     //console.log(complaindata.uid)
+    if(dbconnection.connection){
+        dbconnection.connection.query('CALL reviewcomplain(?,?,?,?,?)',[shortid.generate(),complaindata.uid,complaindata.complainid,complaindata.action,mydate('full', '-', ':')],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.getcleanerappliedjobs=function(uid,callback){
+   
+   if(dbconnection.connection){
+       dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, application a WHERE jr.postid=d.postid AND jr.postid=a.postid AND a.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+           if(err){
+               callback(err);
+           }else{
+               callback(null,rows);
+           }
+       })
+   }else{
+       callback(err);
+   }
+}
+
+module.exports.getcleanerdonejobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ 
 

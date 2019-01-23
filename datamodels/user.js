@@ -16,7 +16,8 @@ module.exports.dbSave = function (regUser, callback) {
                 throw err;
             } else {
                 if (dbconnection.connection) {
-                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
+                    console.log("asaaa");
+                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.photourl, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
                         if (err) {
                             callback(err);
                         } else {
@@ -51,7 +52,71 @@ module.exports.searchUser = function(username,callback){
        callback(err);
    }
 }; 
+ 
+module.exports.searchUser;
 
+module.exports.searchUserById = function(uid,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid AND uid=?', [uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows[0]);
+             var res=JSON.parse(JSON.stringify(rows[0]))
+             callback(null,res);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+
+module.exports.searchwebusers = function(username,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid AND username LIKE "'+username+'%"', [username],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+ module.exports.searchwebusersall = function(username,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid',[],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+ 
 
 
 module.exports.matchpassword = function (password, hash, callback) {
@@ -88,5 +153,100 @@ module.exports.dbSavespecialuser = function (regUser, callback) {
     });
 };
 
+module.exports.removeuser = function(uid,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('DELETE FROM user WHERE uid=?', [uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
 
-module.exports.searchUser;
+
+ module.exports.editprofile = function(userdata,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('UPDATE user SET firstname=? , lastname=?, username=?, email=?, nic=?, gender=?, telephone=?, address=? WHERE uid=?', [userdata.firstname,userdata.lastname,userdata.username,userdata.email,userdata.nic,userdata.gender,userdata.telephone,userdata.address,userdata.uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+ module.exports.editpassword = function(userpass,callback){
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(userpass.newpassword, salt, function (err, hash) {
+            var pass= hash;
+            if (err) {
+                throw err;
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('UPDATE user SET password=? WHERE uid=?', [pass,userpass.uid], function (err, rows, fields) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+ }; 
+
+ 
+ module.exports.getalladproviders = function(nodata,callback){
+    
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT username FROM user u, advertiestmentprovider a WHERE u.uid=a.uid',[],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+            // console.log(rows);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+ module.exports.profpicupdate = function(updatedata,callback){
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('UPDATE user SET photoId=? , photourl=? WHERE uid=?', [updatedata.pic_id,updatedata.pic_url,updatedata.uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }  
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
