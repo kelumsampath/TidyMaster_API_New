@@ -16,7 +16,8 @@ module.exports.dbSave = function (regUser, callback) {
                 throw err;
             } else {
                 if (dbconnection.connection) {
-                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
+                    console.log("asaaa");
+                    dbconnection.connection.query('call addCustomerOrCleaner(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.photourl, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate()], function (err, rows, fields) {
                         if (err) {
                             callback(err);
                         } else {
@@ -228,6 +229,22 @@ module.exports.removeuser = function(uid,callback){
          }
        
          
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+ module.exports.profpicupdate = function(updatedata,callback){
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('UPDATE user SET photoId=? , photourl=? WHERE uid=?', [updatedata.pic_id,updatedata.pic_url,updatedata.uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }  
        })  
     }else{
         callback(err);

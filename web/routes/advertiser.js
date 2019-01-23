@@ -64,7 +64,7 @@ router.post('/adadvertiser', (req, res) => {
 router.post('/getAllAds',(req,res)=>{
   //console.log(req.body.postid)
 
-  venderadmodel.getAllAds(req.body.adproviderid,(err,job)=>{
+  venderadmodel.getAllAds(req.body.username,(err,job)=>{
    if(err) {
      //console.log(err);
      res.send({state:false,msg:"Server error"});
