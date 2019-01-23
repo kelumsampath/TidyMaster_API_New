@@ -308,7 +308,7 @@ module.exports.jobsave=function(job,callback){
 module.exports.getcleanerdonejobs=function(uid,callback){
    
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="done" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
