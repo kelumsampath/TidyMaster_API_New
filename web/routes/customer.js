@@ -112,3 +112,16 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       res.send({ state: false, msg: "this is not a customer " });
     }
   });
+
+  router.post('/getappliedcleaners',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.getappliedcleaners(req.body.postid,(err, cleaners) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, cleaners: cleaners });
+      }
+    })
+  });

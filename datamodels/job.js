@@ -320,5 +320,18 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
- 
+ module.exports.getappliedcleaners=function(postid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM user WHERE uid IN (SELECT u.uid FROM user u,cleaner c,application a WHERE u.uid=c.uid AND c.cleanerid=a.cleanerid AND a.postid=?)',[postid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
 
