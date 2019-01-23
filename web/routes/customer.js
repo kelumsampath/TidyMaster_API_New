@@ -125,3 +125,16 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   });
+
+  router.post('/viewcategory',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.viewcategory((err, category) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, categorylist: category });
+      }
+    })
+  });

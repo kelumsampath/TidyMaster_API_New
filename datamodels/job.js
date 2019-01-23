@@ -335,3 +335,18 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
+ module.exports.viewcategory=function(callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT categoryname FROM category',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
