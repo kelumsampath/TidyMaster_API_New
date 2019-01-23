@@ -47,3 +47,14 @@ module.exports.getimageurl=(public_id,callback)=>{
     //console.log(img)
     callback(img);
 }
+
+module.exports.storeimage=(filepath,callback)=>{
+    cloudinary.uploader.upload(filepath,function(result) {
+        //console.log(result);
+            var data={
+                public_id:result.public_id,
+                url:result.url
+            }
+            callback(data)
+    })
+}
