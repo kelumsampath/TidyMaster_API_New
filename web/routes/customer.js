@@ -112,3 +112,46 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       res.send({ state: false, msg: "this is not a customer " });
     }
   });
+
+  router.post('/getappliedcleaners',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.getappliedcleaners(req.body.postid,(err, cleaners) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, cleaners: cleaners });
+      }
+    })
+  });
+
+  router.post('/viewcategory',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.viewcategory((err, category) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, categorylist: category });
+      }
+    })
+  });
+
+  router.post('/selectcleanerforjob',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    var data={
+      cleanerid:req.body.cleanerid,
+      postid:req.body.postid
+    }
+    //console.log(req.body.postid)
+    jobmodel.selectcleanerforjob(data,(err, abc) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, msg:"cleaner selected" });
+      }
+    })
+  });
