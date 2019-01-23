@@ -37,7 +37,7 @@ router.get('/',(req,res)=>{
   
     var genpassword;
     genaratePassword.genaratepass((pass)=>{
-      console.log(pass);
+      console.log(url);
       genpassword=pass;
     })
    const regUser = {
@@ -47,13 +47,14 @@ router.get('/',(req,res)=>{
       email:req.body.email,
       nic:req.body.nic,
       photoId:public_id,
+      photourl:url,
       gender:req.body.gender,
       telephone:req.body.phoneno,
       password:genpassword,
       role:req.body.role,
       address:req.body.address
     };
-    //console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
         cloudinary.deleteimage(public_id,(callbk)=>{
