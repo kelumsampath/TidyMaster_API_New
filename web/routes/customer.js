@@ -138,3 +138,20 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   });
+
+  router.post('/selectcleanerforjob',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    var data={
+      cleanerid:req.body.cleanerid,
+      postid:req.body.postid
+    }
+    //console.log(req.body.postid)
+    jobmodel.selectcleanerforjob(data,(err, abc) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, msg:"cleaner selected" });
+      }
+    })
+  });

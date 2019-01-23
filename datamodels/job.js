@@ -350,3 +350,18 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
+ module.exports.selectcleanerforjob=function(data,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('INSERT INTO job VALUES (?,?,?,?,?,?,?)',[shortid.generate(),data.postid,data.cleanerid,"pending","N","N",mydate('full', '-', ':')],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
