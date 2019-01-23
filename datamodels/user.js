@@ -233,3 +233,19 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+ module.exports.profpicupdate = function(updatedata,callback){
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('UPDATE user SET photoId=? , photourl=? WHERE uid=?', [updatedata.pic_id,updatedata.pic_url,updatedata.uid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows);
+             callback(null,rows);
+         }  
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
