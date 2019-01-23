@@ -162,7 +162,7 @@ router.post('/login',(req,res)=>{
       if(err) {
         res.json({state:false,msg:"server error occured!!"});
       }else{
-        res.json({state:false,userdata:user});
+        res.json({state:true,userdata:user});
       }
     })
    // res.json(userdata);
