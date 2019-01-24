@@ -291,7 +291,7 @@ router.post('/viewcheckedcomplains',token.verifytoken, (req, res) => {
 });
 
 
-router.post('/complaineduserremove', token.verifytokenaccess, (req, res) => {
+router.post('/complaineduserremove', token.verifytoken, (req, res) => {
   //console.log(req.user)
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
