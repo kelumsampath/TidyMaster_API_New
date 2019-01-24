@@ -268,7 +268,7 @@ router.post('/warnuser', token.verifytoken, (req, res) => {
   });
 });
 
-router.post('/viewuncheckedcomplains', (req, res) => {
+router.post('/viewuncheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcomplains("dd", (err, complain) => {
     if (err) {
@@ -279,7 +279,7 @@ router.post('/viewuncheckedcomplains', (req, res) => {
   });
 });
 
-router.post('/viewcheckedcomplains', (req, res) => {
+router.post('/viewcheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcheckedcomplains("dd", (err, complain) => {
     if (err) {
