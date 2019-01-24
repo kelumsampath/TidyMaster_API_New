@@ -51,7 +51,7 @@ router.post('/adminjobsbystatus', (req, res) => {
   })
 });
 
-router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
+router.post('/acceptpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "accepted",
@@ -70,7 +70,7 @@ router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
   })
 });
 
-router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
+router.post('/rejectpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "rejected",
@@ -88,7 +88,7 @@ router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
 });
 
 
-router.post('/pendingpost', token.verifytokenaccess, (req, res) => {
+router.post('/pendingpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "pending",
