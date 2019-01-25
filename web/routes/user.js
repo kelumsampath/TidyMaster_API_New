@@ -43,7 +43,7 @@ router.get('/',(req,res)=>{
       role:req.body.role,
       address:req.body.address
     };
-    console.log(regUser);
+   // console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
         cloudinary.deleteimage(public_id,(callbk)=>{
