@@ -8,6 +8,17 @@ const token = require('../../config/token');
 const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
 const cloudinary=require('./../../thirdparty/cloudinary');
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads/');
+  },
+  filename: function (req, file, callback) {
+    callback(null, "aw.jpg");
+  }
+});
+const upload = multer({ storage: storage })
 
 module.exports = router;
 
@@ -151,7 +162,7 @@ router.post('/login',(req,res)=>{
       if(err) {
         res.json({state:false,msg:"server error occured!!"});
       }else{
-        res.json({state:false,userdata:user});
+        res.json({state:true,userdata:user});
       }
     })
    // res.json(userdata);
@@ -237,10 +248,40 @@ router.post('/editpassword',token.verifytoken,(req,res)=>{
       res.json({state:false,msg:"No user found!"});
     }
   })
-
-  
-
 });
+
+
+router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,(req,res)=>{
+  var filepath=req.file.path;
+  //console.log(req.user);
+  datamodelds.searchUser(req.user.username,(err,user)=>{
+    if(err){
+     res.json({state:false});
+    }else{
+      const oldpicid=user.photoId;
+      cloudinary.deleteimage(oldpicid,(callb)=>{
+        cloudinary.storeimage(filepath,(callb2)=>{
+          //console.log(callb2.public_id)
+          //console.log(callb2.url)
+          var updatedata={
+            uid:req.user.uid,
+            pic_id:callb2.public_id,
+            pic_url:callb2.url
+          }
+          datamodelds.profpicupdate(updatedata,(err,success)=>{
+            if(err){
+              res.json({state:false,msg:"server error occured!!"});
+            }else{
+              res.json({state:true,msg:"User profile changed!"});
+            }
+          })
+        })
+      })
+      
+    }
+  })
+  
+ });
 
 
 

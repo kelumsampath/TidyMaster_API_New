@@ -308,7 +308,7 @@ module.exports.jobsave=function(job,callback){
 module.exports.getcleanerdonejobs=function(uid,callback){
    
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="done" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
@@ -320,5 +320,48 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
- 
+ module.exports.getappliedcleaners=function(postid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM user WHERE uid IN (SELECT u.uid FROM user u,cleaner c,application a WHERE u.uid=c.uid AND c.cleanerid=a.cleanerid AND a.postid=?)',[postid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.viewcategory=function(callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT categoryname FROM category',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.selectcleanerforjob=function(data,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('INSERT INTO job VALUES (?,?,?,?,?,?,?)',[shortid.generate(),data.postid,data.cleanerid,"pending","N","N",mydate('full', '-', ':')],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
 

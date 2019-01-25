@@ -51,7 +51,7 @@ router.post('/adminjobsbystatus', (req, res) => {
   })
 });
 
-router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
+router.post('/acceptpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "accepted",
@@ -70,7 +70,7 @@ router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
   })
 });
 
-router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
+router.post('/rejectpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "rejected",
@@ -88,7 +88,7 @@ router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
 });
 
 
-router.post('/pendingpost', token.verifytokenaccess, (req, res) => {
+router.post('/pendingpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "pending",
@@ -268,7 +268,7 @@ router.post('/warnuser', token.verifytoken, (req, res) => {
   });
 });
 
-router.post('/viewuncheckedcomplains', (req, res) => {
+router.post('/viewuncheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcomplains("dd", (err, complain) => {
     if (err) {
@@ -279,7 +279,7 @@ router.post('/viewuncheckedcomplains', (req, res) => {
   });
 });
 
-router.post('/viewcheckedcomplains', (req, res) => {
+router.post('/viewcheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcheckedcomplains("dd", (err, complain) => {
     if (err) {
@@ -291,7 +291,7 @@ router.post('/viewcheckedcomplains', (req, res) => {
 });
 
 
-router.post('/complaineduserremove', token.verifytokenaccess, (req, res) => {
+router.post('/complaineduserremove', token.verifytoken, (req, res) => {
   //console.log(req.user)
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
