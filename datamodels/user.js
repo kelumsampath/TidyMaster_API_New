@@ -138,10 +138,12 @@ module.exports.dbSavespecialuser = function (regUser, callback) {
                 throw err;
             } else {
                 if (dbconnection.connection) {
-                    dbconnection.connection.query('call regspecialuser(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId, regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate(),regUser.company], function (err, rows, fields) {
+                    dbconnection.connection.query('call regspecialuser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [shortid.generate(), regUser.role, regUser.username, regUser.password, regUser.email, regUser.nic, regUser.photoId,regUser.url , regUser.telephone, regUser.firstname, regUser.lastname, regUser.gender, regUser.address, shortid.generate(),regUser.company], function (err, rows, fields) {
                         if (err) {
+                            console.log(err)
                             callback(err);
                         } else {
+                            console.log(rows)
                             callback(null, true);
                         }
                     })
