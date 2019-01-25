@@ -128,6 +128,12 @@ router.post('/issuperadmin', token.verifytoken, (req, res) => {
 
 router.post('/specialuser', token.verifytokenaccess, (req, res) => {
   var public_id, url;
+  var gend="O";
+  if(req.body.gender=="Male"){
+    gend="M"
+  }else if(req.body.gender=="Female"){
+    gend="F"
+  }
   cloudinary.defaultuser((callb) => {
     //console.log(callb.public_id)
     //console.log(callb.url)
