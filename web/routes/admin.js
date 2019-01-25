@@ -145,7 +145,7 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       username: req.body.username,
       email: req.body.email,
       nic: req.body.nic,
-      photourl:url,
+      url:url,
       photoId: public_id,
       gender: req.body.gender,
       telephone: req.body.phoneno,
