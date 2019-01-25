@@ -139,12 +139,14 @@ module.exports.jobsave=function(job,callback){
  }
 
  module.exports.changepoststatus=function(postdata,callback){
+     console.log(postdata)
     if(dbconnection.connection){ 
         dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.uid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
-               // console.log(rows);
+                console.log(rows);
                 callback(null,rows[0]);
             }      
           })  
@@ -309,6 +311,36 @@ module.exports.getcleanerdonejobs=function(uid,callback){
    
     if(dbconnection.connection){
         dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="done" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.getcleanerrunningjobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.getcustomerrunningjobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND j.cleanerid IN(SELECT customerid FROM customer WHERE uid=?)',[uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
