@@ -140,3 +140,15 @@ router.post('/getdonejobs',token.verifytoken, (req, res) => {
       }
     })
   })
+
+  router.post('/cleanerrunningjobs',token.verifytoken,(req,res)=>{
+    
+    jobmodel.getcleanerrunningjobs(req.user.uid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
