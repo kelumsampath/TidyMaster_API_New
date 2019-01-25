@@ -55,7 +55,7 @@ router.post('/acceptpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "accepted",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   //console.log(postdata)
@@ -74,7 +74,7 @@ router.post('/rejectpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "rejected",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -92,7 +92,7 @@ router.post('/pendingpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "pending",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -145,6 +145,7 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       username: req.body.username,
       email: req.body.email,
       nic: req.body.nic,
+      photourl:url,
       photoId: public_id,
       gender: req.body.gender,
       telephone: req.body.phoneno,
@@ -153,7 +154,7 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       address: req.body.address,
       company: req.body.company
     };
-    //console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSavespecialuser(regUser, (err, user) => {
       if (err) {
         cloudinary.deleteimage(public_id, (callbk) => {
