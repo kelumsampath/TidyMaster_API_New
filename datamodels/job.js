@@ -139,12 +139,14 @@ module.exports.jobsave=function(job,callback){
  }
 
  module.exports.changepoststatus=function(postdata,callback){
+     console.log(postdata)
     if(dbconnection.connection){ 
         dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.uid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
-               // console.log(rows);
+                console.log(rows);
                 callback(null,rows[0]);
             }      
           })  
