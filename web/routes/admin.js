@@ -55,7 +55,7 @@ router.post('/acceptpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "accepted",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   //console.log(postdata)
@@ -74,7 +74,7 @@ router.post('/rejectpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "rejected",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -92,7 +92,7 @@ router.post('/pendingpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "pending",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -128,6 +128,12 @@ router.post('/issuperadmin', token.verifytoken, (req, res) => {
 
 router.post('/specialuser', token.verifytokenaccess, (req, res) => {
   var public_id, url;
+  var gend="O";
+  if(req.body.gender=="Male"){
+    gend="M"
+  }else if(req.body.gender=="Female"){
+    gend="F"
+  }
   cloudinary.defaultuser((callb) => {
     //console.log(callb.public_id)
     //console.log(callb.url)
@@ -145,15 +151,16 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       username: req.body.username,
       email: req.body.email,
       nic: req.body.nic,
+      url:url,
       photoId: public_id,
-      gender: req.body.gender,
+      gender: gend,
       telephone: req.body.phoneno,
       password: genpassword,
       role: req.body.role,
       address: req.body.address,
       company: req.body.company
     };
-    //console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSavespecialuser(regUser, (err, user) => {
       if (err) {
         cloudinary.deleteimage(public_id, (callbk) => {
