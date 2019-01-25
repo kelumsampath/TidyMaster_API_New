@@ -102,3 +102,12 @@ router.post('/getAllAdsByMonth', token.verifytoken, (req, res) => {
     }
   })
 });
+router.post('/isadvertiser', token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  //console.log(userdata)
+  if (userdata.role == "advertiser") {
+    res.send({ state: true, msg: "this is a advertiser " });
+  } else {
+    res.send({ state: false, msg: "this is not a advertiser " });
+  }
+});
