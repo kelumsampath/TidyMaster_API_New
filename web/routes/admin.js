@@ -153,7 +153,7 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       nic: req.body.nic,
       url:url,
       photoId: public_id,
-      gender: req.body.gender,
+      gender: gend,
       telephone: req.body.phoneno,
       password: genpassword,
       role: req.body.role,
