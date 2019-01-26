@@ -427,4 +427,32 @@ module.exports.getcleanerdonejobs=function(uid,callback){
        }  
  }
 
-
+ module.exports.viewcomplain=function(complainid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM complain c, job j,user u WHERE c.jobid=j.jobid AND c.uid=u.uid AND c.complainid=?', [complainid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+ 
+ module.exports.viewcomplainaction=function(complainid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM Action a,admin ad,user u WHERE a.complainid=? AND a.adminId=ad.adminId AND u.uid=ad.uid', [complainid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }

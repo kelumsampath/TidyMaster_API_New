@@ -441,3 +441,29 @@ router.post('/userprofile',token.verifytoken,(req,res)=>{
  // res.json(userdata);
 
 });
+
+router.post('/viewcomplain',token.verifytoken,(req,res)=>{
+  jobmodel.viewcomplain(req.body.complainid,(err,complain)=>{
+    if(err) {
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      
+          res.json({state:true,complain:complain});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewcomplainaction',token.verifytoken,(req,res)=>{
+  jobmodel.viewcomplainaction(req.body.complainid,(err,action)=>{
+    if(err) {
+      //console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:true,action:action});
+    }
+  })
+ // res.json(userdata);
+
+});
