@@ -195,3 +195,16 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   })
+
+
+  router.post('/donejob',token.verifytoken,(req,res)=>{
+   
+    jobmodel.donejob(req.body.postid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,msg:"Job completed"});
+      }
+    })
+  })
