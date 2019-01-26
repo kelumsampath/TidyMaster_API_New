@@ -397,3 +397,18 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
+ module.exports.findcustomerallpromotedjobs=function(user,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d WHERE jr.postid=d.postid AND d.paymentstatus="y" AND jr.customerid IN (SELECT customerid FROM customer WHERE uid=?)', [user.uid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,fields);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+

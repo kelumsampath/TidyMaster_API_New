@@ -181,3 +181,17 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   })
+
+  router.post('/viewcuspromotedjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomerallpromotedjobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
