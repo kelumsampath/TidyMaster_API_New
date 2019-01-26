@@ -340,7 +340,7 @@ module.exports.getcleanerdonejobs=function(uid,callback){
  module.exports.getcustomerrunningjobs=function(uid,callback){
    
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND j.cleanerid IN(SELECT customerid FROM customer WHERE uid=?)',[uid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND jr.customerid IN(SELECT customerid FROM customer WHERE uid=?)',[uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
