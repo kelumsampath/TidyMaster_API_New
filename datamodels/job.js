@@ -164,7 +164,7 @@ module.exports.jobsave=function(job,callback){
                 callback(err);
             }else{
                // console.log(rows);
-                callback(null,fields);
+                callback(null,row);
             }      
           })  
        }else{
@@ -396,4 +396,35 @@ module.exports.getcleanerdonejobs=function(uid,callback){
         callback(err);
     }
  }
+
+ module.exports.findcustomerallpromotedjobs=function(user,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d WHERE jr.postid=d.postid AND d.paymentstatus="y" AND jr.customerid IN (SELECT customerid FROM customer WHERE uid=?)', [user.uid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.donejob=function(postid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('UPDATE job SET status="done" WHERE postid=?', [postid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,fields);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
 
