@@ -309,10 +309,12 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
       } else {
         datamodelds.removeuser(req.body.uid, (err, users) => {
           if (err) {
+            console.log(err)
             res.json({ state: false, msg: "Server Error1!!" });
           } else {
             email.removeuser(user, (err, resp) => {
               if (err) {
+                console.log(err)
                 res.json({ state: false, msg: "Server Error2!!" });
               } else {
                 var complaindata = {
@@ -322,6 +324,7 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
                 }
                 jobmodel.complaineduseraction(complaindata, (err, call) => {
                   if (err) {
+                    console.log(err)
                     res.json({ state: false, msg: "Server Error3!!" });
                   } else {
                     res.json({ state: true, msg: "user successfuly removed!" });
@@ -445,6 +448,7 @@ router.post('/userprofile',token.verifytoken,(req,res)=>{
 router.post('/viewcomplain',token.verifytoken,(req,res)=>{
   jobmodel.viewcomplain(req.body.complainid,(err,complain)=>{
     if(err) {
+      console.log(err)
       res.json({state:false,msg:"server error occured!!"});
     }else{
       
@@ -458,7 +462,7 @@ router.post('/viewcomplain',token.verifytoken,(req,res)=>{
 router.post('/viewcomplainaction',token.verifytoken,(req,res)=>{
   jobmodel.viewcomplainaction(req.body.complainid,(err,action)=>{
     if(err) {
-      //console.log(err)
+      console.log(err)
       res.json({state:false,msg:"server error occured!!"});
     }else{
       res.json({state:true,action:action});
