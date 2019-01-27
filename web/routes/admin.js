@@ -321,7 +321,7 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
                 var complaindata = {
                   complainid: req.body.complainid,
                   uid: req.user.uid,
-                  action: "warned"
+                  action: "removed"
                 }
                 jobmodel.complaineduseraction(complaindata, (err, call) => {
                   if (err) {
