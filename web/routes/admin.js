@@ -313,7 +313,7 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
             console.log(err)
             res.json({ state: false, msg: "Server Error1!!" });
           } else {
-            email.removeuser(user, (err, resp) => {
+            email.removeuser(user,req.body.reason, (err, resp) => {
               if (err) {
                 console.log(err)
                 res.json({ state: false, msg: "Server Error2!!" });
@@ -321,7 +321,7 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
                 var complaindata = {
                   complainid: req.body.complainid,
                   uid: req.user.uid,
-                  action: "removed"
+                  action: req.body.reason
                 }
                 jobmodel.complaineduseraction(complaindata, (err, call) => {
                   if (err) {
@@ -355,7 +355,7 @@ router.post('/complaineduserwarn', token.verifytokenaccess, (req, res) => {
           var complaindata = {
             complainid: req.body.complainid,
             uid: req.user.uid,
-            action: "warned"
+            action: req.body.reason
           }
           jobmodel.complaineduseraction(complaindata, (err, call) => {
             if (err) {
