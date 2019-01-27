@@ -20,7 +20,9 @@ module.exports.verifytoken =function (req,res,next){
             else{
                 datamodelsUser.matchtoken(bearerToken,(err,mached)=>{
                     //console.log(mached);
-                    if(err) throw err;
+                    if(err){
+                        res.json({state:false,msg:"token expired!"}) 
+                    }
                     else if(mached){
                         //console.log("token mached");
                         req.user=userdata;
@@ -55,7 +57,9 @@ module.exports.verifytokenaccess =function (req,res,next){
             else{
                 datamodelsUser.matchtoken(bearerToken,(err,mached)=>{
                     //console.log(mached);
-                    if(err) throw err;
+                    if(err) {
+                        res.json({state:false,msg:"token expired!"})
+                    }
                     else if(mached){
                         accessdata={
                             resource:accessresource,
@@ -104,7 +108,9 @@ module.exports.verifyfiletoken =function (req,res,next){
             else{
                 datamodelsUser.matchtoken(bearerToken,(err,mached)=>{
                     //console.log(mached);
-                    if(err) throw err;
+                    if(err) {
+                        res.json({state:false,msg:"token expired!"})
+                    }
                     else if(mached){
                         //console.log("token mached");
                         req.user=userdata;
