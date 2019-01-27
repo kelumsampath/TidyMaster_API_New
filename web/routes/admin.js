@@ -302,7 +302,8 @@ router.post('/complaineduserremove', token.verifytoken, (req, res) => {
   //console.log(req.user)
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
-
+      console.log(err)
+      res.json({ state: false, msg: "Server Error0!!" });
     } else {
       if (req.user.role == 'admin' && (user.rolename == 'admin' || user.rolename == 'superadmin')) {
         res.json({ state: false, msg: "No permision to delete that user!" });
