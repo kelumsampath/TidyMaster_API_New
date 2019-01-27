@@ -471,3 +471,31 @@ router.post('/viewcomplainaction',token.verifytoken,(req,res)=>{
  // res.json(userdata);
 
 });
+
+router.post('/viewsingleadvertiesment',token.verifytoken,(req,res)=>{
+  advertismentmodel.viewsingleadvertiesment(req.body.advertiesmentid,(err,advertiesment)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:true,advertiesment:advertiesment});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewadmin',token.verifytoken,(req,res)=>{
+  //console.log(req.body.advertiesmentid)
+  advertismentmodel.viewadmin(req.body.advertiesmentid,(err,admin)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      //console.log(admin)
+      res.json({state:true,admin:admin});
+    }
+  })
+ // res.json(userdata);
+
+});
