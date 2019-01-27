@@ -24,10 +24,10 @@ module.exports.unamepasssend=function(userdata,callback){
         });
 }
 
-module.exports.removeuser=function(userdata,callback){
+module.exports.removeuser=function(userdata,reason,callback){
     var toEmail = new helper.Email(userdata.email);
     var subject = 'TIDYMASTER';
-    var content = new helper.Content('text/plain', 'Hi '+userdata.username+'! /n Its sad to inform, your Tidymaster account has been deactivated by admin!');
+    var content = new helper.Content('text/plain', 'Hi '+userdata.username+'! /n Its sad to inform, your Tidymaster account has been deactivated by admin! messege:'+reason);
     var mail = new helper.Mail(fromEmail, subject, toEmail, content);
     var sg = require('sendgrid')(apikey);
     var request = sg.emptyRequest({
@@ -49,7 +49,7 @@ module.exports.removeuser=function(userdata,callback){
 module.exports.warnuser=function(userdata,reason,callback){
     var toEmail = new helper.Email(userdata.email);
     var subject = 'TIDYMASTER';
-    var content = new helper.Content('text/plain', 'Hi '+userdata.username+'! Warning! you have warning from admin, massage: '+reason);
+    var content = new helper.Content('text/plain', 'Hi '+userdata.username+'! Warning! you have warning from admin, message: '+reason);
     var mail = new helper.Mail(fromEmail, subject, toEmail, content);
     var sg = require('sendgrid')(apikey);
     var request = sg.emptyRequest({
