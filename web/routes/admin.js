@@ -500,3 +500,18 @@ router.post('/viewadmin',token.verifytoken,(req,res)=>{
  // res.json(userdata);
 
 });
+
+router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
+  //console.log(req.body.advertiesmentid)
+  datamodelds.searchUserByadminId(req.body.adminid,(err,admin)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      //console.log(admin)
+      res.json({state:true,admin:admin});
+    }
+  })
+ // res.json(userdata);
+
+});
