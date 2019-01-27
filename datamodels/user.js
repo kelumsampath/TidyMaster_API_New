@@ -272,3 +272,24 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+ module.exports.searchUserByadminId = function(adminid,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r,admin ad WHERE u.roleid=r.roleid AND u.uid=ad.uid AND ad.adminid=?', [adminid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows[0]);
+             var res=JSON.parse(JSON.stringify(rows[0]))
+             callback(null,res);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
