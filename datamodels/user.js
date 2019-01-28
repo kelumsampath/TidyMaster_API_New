@@ -314,3 +314,34 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+
+ module.exports.fogotpassword=function(data,callback){
+     console.log(data)
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(data.newpassword, salt, function (err, hash) {
+            data.newpassword = hash;
+            if (err) {
+                //throw err;
+                console.log(err)
+                callback(null,false)
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('UPDATE user SET password=? WHERE uid=?', [data.newpassword,data.uid], function (err, rows, fields) {
+                        if (err) {
+                            console.log(err)
+                            callback(err);
+                        } else {
+                            console.log(rows)
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+ }; 
+
+ 
