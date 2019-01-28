@@ -75,10 +75,12 @@ router.post('/getAllAds',token.verifytoken, (req, res) => {
   })
 });
 
-router.post('/getDailyViews', (req, res) => {
-  //console.log(req.body.postid)
-
-  venderadmodel.getDailyViews(req.body.adId, (err, job) => {
+router.post('/getDailyViews', token.verifytoken,  (req, res) => {
+  
+  const adId={
+    adId:req.body.id
+  }
+  venderadmodel.getDailyViews(req.body.id, (err, ad) => {
     if (err) {
       console.log(err);
       res.send({ state: false, msg: "Server error" });
