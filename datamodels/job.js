@@ -139,12 +139,14 @@ module.exports.jobsave=function(job,callback){
  }
 
  module.exports.changepoststatus=function(postdata,callback){
+     console.log(postdata)
     if(dbconnection.connection){ 
         dbconnection.connection.query('CALL getAdminAcceptance(?,?,?,?,?,?)', [shortid.generate(),postdata.uid,postdata.postid,postdata.reason,mydate('full', '-', ':'),postdata.status],function (err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
-               // console.log(rows);
+                console.log(rows);
                 callback(null,rows[0]);
             }      
           })  
@@ -162,7 +164,7 @@ module.exports.jobsave=function(job,callback){
                 callback(err);
             }else{
                // console.log(rows);
-                callback(null,fields);
+                callback(null,row);
             }      
           })  
        }else{
@@ -308,7 +310,7 @@ module.exports.jobsave=function(job,callback){
 module.exports.getcleanerdonejobs=function(uid,callback){
    
     if(dbconnection.connection){
-        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="done" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
             if(err){
                 callback(err);
             }else{
@@ -320,5 +322,139 @@ module.exports.getcleanerdonejobs=function(uid,callback){
     }
  }
 
+ module.exports.getcleanerrunningjobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND j.cleanerid IN(SELECT cleanerid FROM cleaner WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.getcustomerrunningjobs=function(uid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d, job j WHERE jr.postid=d.postid AND jr.postid=j.postid AND j.status="pending" AND jr.customerid IN(SELECT customerid FROM customer WHERE uid=?)',[uid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.getappliedcleaners=function(postid,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT * FROM user WHERE uid IN (SELECT u.uid FROM user u,cleaner c,application a WHERE u.uid=c.uid AND c.cleanerid=a.cleanerid AND a.postid=?)',[postid],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.viewcategory=function(callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('SELECT categoryname FROM category',[],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.selectcleanerforjob=function(data,callback){
+   
+    if(dbconnection.connection){
+        dbconnection.connection.query('INSERT INTO job VALUES (?,?,?,?,?,?,?)',[shortid.generate(),data.postid,data.cleanerid,"pending","N","N",mydate('full', '-', ':')],function(err,rows,fields){
+            if(err){
+                callback(err);
+            }else{
+                callback(null,rows);
+            }
+        })
+    }else{
+        callback(err);
+    }
+ }
+
+ module.exports.findcustomerallpromotedjobs=function(user,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM jobrequestpost jr,description d WHERE jr.postid=d.postid AND d.paymentstatus="y" AND jr.customerid IN (SELECT customerid FROM customer WHERE uid=?)', [user.uid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.donejob=function(postid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('UPDATE job SET status="done" WHERE postid=?', [postid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,fields);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.viewcomplain=function(complainid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM complain c, job j,user u WHERE c.jobid=j.jobid AND c.uid=u.uid AND c.complainid=?', [complainid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
  
+ module.exports.viewcomplainaction=function(complainid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM action a,admin ad,user u WHERE a.complainid=? AND a.adminId=ad.adminId AND u.uid=ad.uid', [complainid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
 

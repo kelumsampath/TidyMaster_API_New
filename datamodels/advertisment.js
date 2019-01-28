@@ -52,3 +52,33 @@ module.exports.deletead=function(adid,callback){
       callback(err);
   }
 }; 
+
+module.exports.viewsingleadvertiesment=function(advertiesmentid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM verndoradvertiestment v,advertiestmentprovider ad,user u WHERE v.adproviderid=ad.adproviderid AND ad.uid=u.uid AND v.adId=?', [advertiesmentid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.viewadmin=function(advertiesmentid,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT * FROM verndoradvertiestment v,admin ad,user u WHERE v.adminId=ad.adminId AND ad.uid=u.uid AND v.adId=?', [advertiesmentid],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows[0]);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }

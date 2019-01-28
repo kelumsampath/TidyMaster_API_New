@@ -51,11 +51,11 @@ router.post('/adminjobsbystatus', (req, res) => {
   })
 });
 
-router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
+router.post('/acceptpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "accepted",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   //console.log(postdata)
@@ -70,11 +70,11 @@ router.post('/acceptpost', token.verifytokenaccess, (req, res) => {
   })
 });
 
-router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
+router.post('/rejectpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "rejected",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -88,11 +88,11 @@ router.post('/rejectpost', token.verifytokenaccess, (req, res) => {
 });
 
 
-router.post('/pendingpost', token.verifytokenaccess, (req, res) => {
+router.post('/pendingpost', token.verifytoken, (req, res) => {
   const postdata = {
     "postid": req.body.postid,
     "status": "pending",
-    "adminid": req.user.uid,
+    "uid": req.user.uid,
     "reason": req.body.reason
   }
   jobmodel.changepoststatus(postdata, (err, msg) => {
@@ -128,6 +128,12 @@ router.post('/issuperadmin', token.verifytoken, (req, res) => {
 
 router.post('/specialuser', token.verifytokenaccess, (req, res) => {
   var public_id, url;
+  var gend="O";
+  if(req.body.gender=="Male"){
+    gend="M"
+  }else if(req.body.gender=="Female"){
+    gend="F"
+  }
   cloudinary.defaultuser((callb) => {
     //console.log(callb.public_id)
     //console.log(callb.url)
@@ -145,15 +151,16 @@ router.post('/specialuser', token.verifytokenaccess, (req, res) => {
       username: req.body.username,
       email: req.body.email,
       nic: req.body.nic,
+      url:url,
       photoId: public_id,
-      gender: req.body.gender,
+      gender: gend,
       telephone: req.body.phoneno,
       password: genpassword,
       role: req.body.role,
       address: req.body.address,
       company: req.body.company
     };
-    //console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSavespecialuser(regUser, (err, user) => {
       if (err) {
         cloudinary.deleteimage(public_id, (callbk) => {
@@ -268,7 +275,7 @@ router.post('/warnuser', token.verifytoken, (req, res) => {
   });
 });
 
-router.post('/viewuncheckedcomplains', (req, res) => {
+router.post('/viewuncheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcomplains("dd", (err, complain) => {
     if (err) {
@@ -279,7 +286,7 @@ router.post('/viewuncheckedcomplains', (req, res) => {
   });
 });
 
-router.post('/viewcheckedcomplains', (req, res) => {
+router.post('/viewcheckedcomplains',token.verifytoken, (req, res) => {
 
   jobmodel.viewcheckedcomplains("dd", (err, complain) => {
     if (err) {
@@ -291,30 +298,34 @@ router.post('/viewcheckedcomplains', (req, res) => {
 });
 
 
-router.post('/complaineduserremove', token.verifytokenaccess, (req, res) => {
+router.post('/complaineduserremove', token.verifytoken, (req, res) => {
   //console.log(req.user)
   datamodelds.searchUserById(req.body.uid, (err, user) => {
     if (err) {
-
+      console.log(err)
+      res.json({ state: false, msg: "Server Error0!!" });
     } else {
       if (req.user.role == 'admin' && (user.rolename == 'admin' || user.rolename == 'superadmin')) {
         res.json({ state: false, msg: "No permision to delete that user!" });
       } else {
         datamodelds.removeuser(req.body.uid, (err, users) => {
           if (err) {
+            console.log(err)
             res.json({ state: false, msg: "Server Error1!!" });
           } else {
-            email.removeuser(user, (err, resp) => {
+            email.removeuser(user,req.body.reason, (err, resp) => {
               if (err) {
+                console.log(err)
                 res.json({ state: false, msg: "Server Error2!!" });
               } else {
                 var complaindata = {
                   complainid: req.body.complainid,
                   uid: req.user.uid,
-                  action: "warned"
+                  action: req.body.reason
                 }
                 jobmodel.complaineduseraction(complaindata, (err, call) => {
                   if (err) {
+                    console.log(err)
                     res.json({ state: false, msg: "Server Error3!!" });
                   } else {
                     res.json({ state: true, msg: "user successfuly removed!" });
@@ -344,7 +355,7 @@ router.post('/complaineduserwarn', token.verifytokenaccess, (req, res) => {
           var complaindata = {
             complainid: req.body.complainid,
             uid: req.user.uid,
-            action: "warned"
+            action: req.body.reason
           }
           jobmodel.complaineduseraction(complaindata, (err, call) => {
             if (err) {
@@ -428,7 +439,77 @@ router.post('/userprofile',token.verifytoken,(req,res)=>{
     if(err) {
       res.json({state:false,msg:"server error occured!!"});
     }else{
-      res.json({state:false,userdata:user});
+      res.json({state:true,userdata:user});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewcomplain',token.verifytoken,(req,res)=>{
+  jobmodel.viewcomplain(req.body.complainid,(err,complain)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      
+          res.json({state:true,complain:complain});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewcomplainaction',token.verifytoken,(req,res)=>{
+  jobmodel.viewcomplainaction(req.body.complainid,(err,action)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:true,action:action});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewsingleadvertiesment',token.verifytoken,(req,res)=>{
+  advertismentmodel.viewsingleadvertiesment(req.body.advertiesmentid,(err,advertiesment)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      res.json({state:true,advertiesment:advertiesment});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewadmin',token.verifytoken,(req,res)=>{
+  //console.log(req.body.advertiesmentid)
+  advertismentmodel.viewadmin(req.body.advertiesmentid,(err,admin)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      //console.log(admin)
+      res.json({state:true,admin:admin});
+    }
+  })
+ // res.json(userdata);
+
+});
+
+router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
+  //console.log(req.body.advertiesmentid)
+  datamodelds.searchUserByadminId(req.body.adminid,(err,admin)=>{
+    if(err) {
+      console.log(err)
+      res.json({state:false,msg:"server error occured!!"});
+    }else{
+      //console.log(admin)
+      res.json({state:true,admin:admin});
     }
   })
  // res.json(userdata);
