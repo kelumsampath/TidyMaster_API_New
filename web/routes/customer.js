@@ -155,3 +155,56 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       }
     })
   });
+
+  router.post('/customerprofile',token.verifytoken,(req,res)=>{
+    //var userdata = req.user;
+    //console.log(req.session);
+    datamodelds.searchUserbycustomerId(req.body.customerId,(err,user)=>{
+      if(err) {
+        res.json({state:false,msg:"server error occured!!"});
+      }else{
+        res.json({state:false,userdata:user});
+      }
+    })
+   // res.json(userdata);
+  
+  });
+
+  router.post('/customerrunningjobs',token.verifytoken,(req,res)=>{
+    
+    jobmodel.getcustomerrunningjobs(req.user.uid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+  router.post('/viewcuspromotedjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomerallpromotedjobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+
+  router.post('/donejob',token.verifytoken,(req,res)=>{
+   
+    jobmodel.donejob(req.body.postid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,msg:"Job completed"});
+      }
+    })
+  })
