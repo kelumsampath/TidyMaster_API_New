@@ -284,4 +284,47 @@ router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,
  });
 
 
+ router.post('/fogetpassword', (req, res) => {
+  var data={
+    username:req.body.username
+  }
+  var genpassword;
+    genaratePassword.genaratepass((pass)=>{
+     
+      genpassword=pass;
+    })
+  console.log(data)
+  datamodelds.searchUser(req.body.username,function(err,user){
+    if(err){
+      res.json({state:false,msg:"server error occured!!"});
+      }
+  
+    if(user){
+      var mydata={
+        uid:user.uid,
+        newpassword:genpassword
+      }
+      datamodelds.fogotpassword(mydata,(err,callb)=>{
+        var userdata={
+          email:user.email,
+          password:genpassword
+        }
+          email.fogetpassword(userdata,(err,cb)=>{
+            if (err) {
+              //console.log(err);
+              res.send({ state: false, msg: "Server error2" });
+            }else{
+              res.send({ state: true, msg:"System genarated password has been send to your email!" });
+            }
+          })
+      })
+    }else{
+      res.json({state:false,msg:"No user found!"});
+    }
+  })
+});
+
+
+
+
 

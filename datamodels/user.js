@@ -314,3 +314,53 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+
+ module.exports.fogotpassword=function(data,callback){
+     console.log(data)
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(data.newpassword, salt, function (err, hash) {
+            data.newpassword = hash;
+            if (err) {
+                //throw err;
+                console.log(err)
+                callback(null,false)
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('UPDATE user SET password=? WHERE uid=?', [data.newpassword,data.uid], function (err, rows, fields) {
+                        if (err) {
+                            console.log(err)
+                            callback(err);
+                        } else {
+                            console.log(rows)
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+ }; 
+
+ module.exports.searchUser2 = function(username,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r WHERE u.roleid=r.roleid AND username=?', [username],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows[0]);
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        
+        callback(err);
+    }
+ }; 
