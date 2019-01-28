@@ -112,3 +112,99 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
       res.send({ state: false, msg: "this is not a customer " });
     }
   });
+
+  router.post('/getappliedcleaners',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.getappliedcleaners(req.body.postid,(err, cleaners) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, cleaners: cleaners });
+      }
+    })
+  });
+
+  router.post('/viewcategory',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    //console.log(req.body.postid)
+    jobmodel.viewcategory((err, category) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, categorylist: category });
+      }
+    })
+  });
+
+  router.post('/selectcleanerforjob',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    var data={
+      cleanerid:req.body.cleanerid,
+      postid:req.body.postid
+    }
+    //console.log(req.body.postid)
+    jobmodel.selectcleanerforjob(data,(err, abc) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, msg:"cleaner selected" });
+      }
+    })
+  });
+
+  router.post('/customerprofile',token.verifytoken,(req,res)=>{
+    //var userdata = req.user;
+    //console.log(req.session);
+    datamodelds.searchUserbycustomerId(req.body.customerId,(err,user)=>{
+      if(err) {
+        res.json({state:false,msg:"server error occured!!"});
+      }else{
+        res.json({state:false,userdata:user});
+      }
+    })
+   // res.json(userdata);
+  
+  });
+
+  router.post('/customerrunningjobs',token.verifytoken,(req,res)=>{
+    
+    jobmodel.getcustomerrunningjobs(req.user.uid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+  router.post('/viewcuspromotedjob',token.verifytoken,(req,res)=>{
+    const user = {
+      uid:req.user.uid
+    }
+    jobmodel.findcustomerallpromotedjobs(user,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+
+  router.post('/donejob',token.verifytoken,(req,res)=>{
+   
+    jobmodel.donejob(req.body.postid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,msg:"Job completed"});
+      }
+    })
+  })

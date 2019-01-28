@@ -30,7 +30,7 @@ router.post('/adadvertiser', (req, res) => {
     password: genpassword,
     role: req.body.role,
     address: req.body.address,
-    company : req.body.company
+    company: req.body.company
   };
   //console.log(regUser);
   datamodelds.saveadvertiser(advertiser, (err, user) => {
@@ -61,44 +61,55 @@ router.post('/adadvertiser', (req, res) => {
   })
 });
 
-router.post('/getAllAds',(req,res)=>{
-  //console.log(req.body.postid)
-
-  venderadmodel.getAllAds(req.body.username,(err,job)=>{
-   if(err) {
-     //console.log(err);
-     res.send({state:false,msg:"Server error"});
-   }else{   
-     console.log(adproviderid);
-   res.send({state:true,ad:ad});
-   }
- }) 
-});
-
-router.post('/getDailyViews',(req,res)=>{
-  //console.log(req.body.postid)
-
-  venderadmodel.getDailyViews(req.body.adId,(err,job)=>{
-   if(err) {
-     //console.log(err);
-     res.send({state:false,msg:"Server error"});
-   }else{   
-   res.send({state:true,ad:ad});
-   }
- }) 
-});
-
-router.post('/getAllAdsByMonth',token.verifytoken,(req,res)=>{
- 
-  var userdata = req.user;
-  console.log(userdata.username);
-  venderadmodel.getAllAdsByMonth(userdata.username,(err,active)=>{
-   if(err) {
+router.post('/getAllAds',token.verifytoken, (req, res) => {
   
-     res.send({state:false,msg:"Server error"});
-   }else{   
-    
-   res.send({state:true,ad:active});
-   }
- }) 
+  var userdata = req.user;
+  venderadmodel.getAllAds(userdata.username, (err, ad) => {
+    if (err) {
+      console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+     
+      res.send({ state: true, ad: ad });
+    }
+  })
+});
+
+router.post('/getDailyViews', token.verifytoken,  (req, res) => {
+  
+  const adId={
+    adId:req.body.id
+  }
+  venderadmodel.getDailyViews(req.body.id, (err, ad) => {
+    if (err) {
+      console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, ad: ad });
+    }
+  })
+});
+
+router.post('/getAllAdsByMonth', token.verifytoken, (req, res) => {
+
+  var userdata = req.user;
+ // console.log(userdata.username);
+  venderadmodel.getAllAdsByMonth(userdata.username, (err, active) => {
+    if (err) {
+
+      res.send({ state: false, msg: "Server error" });
+    } else {
+
+      res.send({ state: true, ad: active });
+    }
+  })
+});
+router.post('/isadvertiser', token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  //console.log(userdata)
+  if (userdata.role == "advertiser") {
+    res.send({ state: true, msg: "this is a advertiser " });
+  } else {
+    res.send({ state: false, msg: "this is not a advertiser " });
+  }
 });
