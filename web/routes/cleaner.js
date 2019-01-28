@@ -152,3 +152,15 @@ router.post('/getdonejobs',token.verifytoken, (req, res) => {
       }
     })
   })
+
+  router.post('/customerprofile',token.verifytoken,(req,res)=>{
+    
+    jobmodel.customerprofile(req.body.customerid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })

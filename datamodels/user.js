@@ -293,3 +293,24 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+ module.exports.customerprofile=function(customerid,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r,customer c WHERE u.roleid=r.roleid AND u.uid=c.uid AND c.customerid=?', [customerid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows[0]);
+             var res=JSON.parse(JSON.stringify(rows[0]))
+             callback(null,res);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
