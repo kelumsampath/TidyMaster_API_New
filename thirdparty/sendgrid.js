@@ -67,3 +67,25 @@ module.exports.warnuser=function(userdata,reason,callback){
         
     });
 }
+
+module.exports.fogetpassword=function(userdata,callback){
+    var toEmail = new helper.Email(userdata.email);
+    var subject = 'TIDYMASTER';
+    var content = new helper.Content('text/plain', 'Hi! Warning! your password has been reseted. New password is: '+userdata.password);
+    var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+    var sg = require('sendgrid')(apikey);
+    var request = sg.emptyRequest({
+        method: 'POST',
+        path: '/v3/mail/send',
+        body: mail.toJSON()
+    });
+    sg.API(request, function (error, response) {
+    if (error) {
+        callback(error);
+    }else{
+        //console.log(response)
+        callback(null,response);
+    }
+        
+    });
+}
