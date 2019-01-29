@@ -489,8 +489,9 @@ module.exports.getcleanerdonejobs=function(uid,callback){
 
  module.exports.promotejob=function(data,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('', [data],function (err, rows, fields) {
+        dbconnection.connection.query('CALL promoteJob(?,?,?)', [data.postid,shortid.generate(),data.feeid],function (err, rows, fields) {
             if (err){
+                console.log(err)
                 callback(err);
             }else{
                // console.log(rows);
