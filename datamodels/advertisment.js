@@ -82,3 +82,18 @@ module.exports.viewsingleadvertiesment=function(advertiesmentid,callback){
            callback(err);
        }  
  }
+
+ module.exports.displayadvertiesment=function(nu,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('SELECT vendorURL FROM verndoradvertiestment', [],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }

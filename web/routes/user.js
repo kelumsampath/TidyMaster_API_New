@@ -9,6 +9,7 @@ const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
 const cloudinary=require('./../../thirdparty/cloudinary');
 const multer  = require('multer');
+const advertismentmodel = require('../../datamodels/advertisment');
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -30,7 +31,7 @@ router.get('/',(req,res)=>{
     //console.log(req.body);
     var public_id,url;
     cloudinary.defaultuser((callb)=>{
-      //console.log(callb.public_id)
+      console.log(callb.public_id)
       //console.log(callb.url)
       public_id=callb.public_id;
       url=callb.url;
@@ -54,9 +55,10 @@ router.get('/',(req,res)=>{
       role:req.body.role,
       address:req.body.address
     };
-   // console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
+        console.log(err);
         cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               console.log('There was a duplicate key error');
@@ -324,7 +326,36 @@ router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,
   })
 });
 
+router.post('/complainuser',token.verifytoken,(req,res)=>{
+    var complain={
+      jobid:req.body.jobid,
+      uid:req.body.uid,
+      complain:req.body.complain,
+      status:"pending",
 
+    }
+  datamodelds.createcomplain(complain,(err,cb)=>{
+    if(err){
+      console.log(err);
+      res.send({state:false,msg:"db error"});
+    }else{
+      res.send({state:true,msg:"complain recorded!"});
+    }
+  })
+})
+
+router.post('/displayadvertiesment',token.verifytoken,(req,res)=>{
+
+advertismentmodel.displayadvertiesment("null",(err,cb)=>{
+  if(err){
+    console.log(err);
+    res.send({state:false,msg:"db error"});
+  }else{
+    //console.log(cb)
+    res.send({state:true,add:cb});
+  }
+})
+})
 
 
 

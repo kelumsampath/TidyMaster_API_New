@@ -199,7 +199,9 @@ router.post('/profpic', token.verifytoken, (req, res) => {
       cloudinary.getimageurl(user.photoId, (call) => {
         var data = {
           url: call,
-          username: userdata.username
+          username: userdata.username,
+          role:user.rolename,
+          address:user.address
         }
         res.json({ state: true, data: data });
       })
@@ -515,3 +517,21 @@ router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
  // res.json(userdata);
 
 });
+
+router.post('/promotejob',token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  var data={
+    postid:req.body.postid.postid,
+    feeid:"pf1"
+  }
+   console.log(data)
+  jobmodel.promotejob(data,(err, abc) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, msg:"Job Promoted" });
+    }
+  })
+});
+
