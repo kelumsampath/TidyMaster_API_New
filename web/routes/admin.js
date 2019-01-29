@@ -516,11 +516,11 @@ router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
 
 });
 
-router.post('/promote',token.verifytoken, (req, res) => {
+router.post('/promotejob',token.verifytoken, (req, res) => {
   var userdata = req.user;
   var data={
     postid:req.body.postid,
-    rate:req.userdata.uid
+    feeid:"pf1"
   }
   //console.log(req.body.postid)
   jobmodel.promotejob(data,(err, abc) => {
@@ -528,7 +528,7 @@ router.post('/promote',token.verifytoken, (req, res) => {
       //console.log(err);
       res.send({ state: false, msg: "Server error" });
     } else {
-      res.send({ state: true, msg:"cleaner selected" });
+      res.send({ state: true, msg:"Job Promoted" });
     }
   })
 });
