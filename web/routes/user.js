@@ -324,7 +324,23 @@ router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,
   })
 });
 
+router.post('/complainuser',token.verifytoken,(req,res)=>{
+    var complain={
+      jobid:req.body.jobid,
+      uid:req.body.uid,
+      complain:req.body.complain,
+      status:"pending",
 
+    }
+  datamodelds.createcomplain(complain,(err,cb)=>{
+    if(err){
+      console.log(err);
+      res.send({state:false,msg:"db error"});
+    }else{
+      res.send({state:true,msg:"complain recorded!"});
+    }
+  })
+})
 
 
 

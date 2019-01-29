@@ -515,3 +515,21 @@ router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
  // res.json(userdata);
 
 });
+
+router.post('/promote',token.verifytoken, (req, res) => {
+  var userdata = req.user;
+  var data={
+    postid:req.body.postid,
+    rate:req.userdata.uid
+  }
+  //console.log(req.body.postid)
+  jobmodel.promotejob(data,(err, abc) => {
+    if (err) {
+      //console.log(err);
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, msg:"cleaner selected" });
+    }
+  })
+});
+

@@ -344,4 +344,20 @@ module.exports.removeuser = function(uid,callback){
     });
  }; 
 
- 
+ module.exports.createcomplain=function(complain,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('INSERT INTO complain VALUES (?,?,?,?,?,?)', [shortid.generate(),complain.jobid,complain.uid,complain.complain,mydate('full', '-', ':'),complain.status],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             
+             callback(null,rows);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
