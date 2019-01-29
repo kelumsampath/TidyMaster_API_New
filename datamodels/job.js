@@ -457,4 +457,32 @@ module.exports.getcleanerdonejobs=function(uid,callback){
        }  
  }
 
- 
+ module.exports.ratecleaner=function(data,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('', [data],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.promotejob=function(data,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('', [data],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
