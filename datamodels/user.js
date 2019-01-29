@@ -21,6 +21,7 @@ module.exports.dbSave = function (regUser, callback) {
                         if (err) {
                             callback(err);
                         } else {
+                            console.log("DB Success");
                             callback(null, true);
                         }
                     })

@@ -360,7 +360,7 @@ module.exports.getcleanerdonejobs=function(uid,callback){
                 callback(err);
             }else{
                 callback(null,rows);
-            }
+            }x
         })
     }else{
         callback(err);
@@ -486,4 +486,3 @@ module.exports.getcleanerdonejobs=function(uid,callback){
            callback(err);
        }  
  }
-
