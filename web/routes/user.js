@@ -31,7 +31,7 @@ router.get('/',(req,res)=>{
     //console.log(req.body);
     var public_id,url;
     cloudinary.defaultuser((callb)=>{
-      //console.log(callb.public_id)
+      console.log(callb.public_id)
       //console.log(callb.url)
       public_id=callb.public_id;
       url=callb.url;
@@ -58,6 +58,7 @@ router.get('/',(req,res)=>{
     console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
+        console.log(err);
         cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               console.log('There was a duplicate key error');

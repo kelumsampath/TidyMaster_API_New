@@ -505,6 +505,7 @@ module.exports.getcleanerdonejobs=function(uid,callback){
        }  
  }
 
+
  module.exports.getalljobs2=function(callback){
     if(dbconnection.connection){ 
         dbconnection.connection.query('SELECT * FROM description d, jobrequestpost j, category c WHERE d.postid=j.postid AND j.categoryid=c.categoryid AND j.status=?', ["accepted"],function (err, rows, fields) {
@@ -522,3 +523,4 @@ module.exports.getcleanerdonejobs=function(uid,callback){
            callback(err);
        }   
  }
+
