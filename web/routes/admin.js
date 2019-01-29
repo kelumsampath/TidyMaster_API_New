@@ -199,7 +199,9 @@ router.post('/profpic', token.verifytoken, (req, res) => {
       cloudinary.getimageurl(user.photoId, (call) => {
         var data = {
           url: call,
-          username: userdata.username
+          username: userdata.username,
+          role:user.rolename,
+          address:user.address
         }
         res.json({ state: true, data: data });
       })

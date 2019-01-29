@@ -39,7 +39,9 @@ module.exports.getAllAds=function(username,callback){
     
     if(dbconnection.connection){ 
        
-        dbconnection.connection.query('SELECT MONTHNAME(createdDateAndTime) AS month , COUNT(adId) AS count FROM verndoradvertiestment WHERE adproviderid IN (SELECT adproviderid FROM advertiestmentprovider WHERE uid IN (SELECT uid FROM user WHERE username = ? ) ) AND YEAR(createdDateAndTime) = YEAR(CURDATE()) GROUP BY month)', [username],function (err, rows, fields) {
+
+        dbconnection.connection.query('SELECT MONTHNAME(createdDateAndTime) AS month , COUNT(adId) AS count FROM verndoradvertiestment WHERE adproviderid IN (SELECT adproviderid FROM advertiestmentprovider WHERE uid IN (SELECT uid FROM user WHERE username = ? ) ) AND YEAR(createdDateAndTime) = YEAR(CURDATE()) GROUP BY month', [username],function (err, rows, fields) {
+
             if (err){
                
                 callback(err);
