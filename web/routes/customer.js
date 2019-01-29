@@ -29,6 +29,7 @@ router.get('/',(req,res)=>{
        jobdate:req.body.jobdate,
        paymentstatus:'N'
      }
+     console.log(job)
      jobmodel.jobsave(job,(err,msg)=>{
        if(err) {
          console.log(err);
@@ -226,5 +227,4 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
     })
   });
 
-  
-  
+
