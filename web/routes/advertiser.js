@@ -93,10 +93,10 @@ router.post('/getDailyViews', token.verifytoken,  (req, res) => {
 router.post('/getAllAdsByMonth', token.verifytoken, (req, res) => {
 
   var userdata = req.user;
- // console.log(userdata.username);
+ //console.log(userdata.username);
   venderadmodel.getAllAdsByMonth(userdata.username, (err, active) => {
     if (err) {
-
+      console.log(err);
       res.send({ state: false, msg: "Server error" });
     } else {
 
