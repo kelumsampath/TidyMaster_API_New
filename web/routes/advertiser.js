@@ -113,3 +113,15 @@ router.post('/isadvertiser', token.verifytoken, (req, res) => {
     res.send({ state: false, msg: "this is not a advertiser " });
   }
 });
+
+router.post('/countViews', token.verifytoken, (req, res) => {
+  var adId = req.body.adId;
+ //console.log(userdata.username);
+  venderadmodel.countViews(adId, (err, active) => {
+    if (err) {
+      res.send({ state: false, msg: "Server error" });
+    } else {
+      res.send({ state: true, msg: "successfull" });
+    }
+  })
+});
