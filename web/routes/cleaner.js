@@ -25,6 +25,8 @@ router.post('/getalljobs', (req, res) => {
 });
 
 
+
+
 router.post('/viewjob', (req, res) => {
   //console.log(req.body.postid)
 
@@ -178,6 +180,19 @@ router.post('/getdonejobs',token.verifytoken, (req, res) => {
         res.send({ state: false, msg: "Server error" });
       } else {
         res.send({ state: true, msg:"customer rated" });
+      }
+    })
+  });
+
+
+  router.post('/getalljobs2', (req, res) => {
+
+    jobmodel.getalljobs2((err, jobs) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, jobs: jobs });
       }
     })
   });
