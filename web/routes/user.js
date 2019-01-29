@@ -9,6 +9,7 @@ const email=require('./../../thirdparty/sendgrid');
 const genaratePassword = require('../../thirdparty/genarate-password');
 const cloudinary=require('./../../thirdparty/cloudinary');
 const multer  = require('multer');
+const advertismentmodel = require('../../datamodels/advertisment');
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -340,6 +341,19 @@ router.post('/complainuser',token.verifytoken,(req,res)=>{
       res.send({state:true,msg:"complain recorded!"});
     }
   })
+})
+
+router.post('/displayadvertiesment',token.verifytoken,(req,res)=>{
+
+advertismentmodel.displayadvertiesment("null",(err,cb)=>{
+  if(err){
+    console.log(err);
+    res.send({state:false,msg:"db error"});
+  }else{
+    //console.log(cb)
+    res.send({state:true,add:cb});
+  }
+})
 })
 
 
