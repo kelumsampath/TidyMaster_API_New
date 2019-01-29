@@ -85,7 +85,7 @@ module.exports.viewsingleadvertiesment=function(advertiesmentid,callback){
 
  module.exports.displayadvertiesment=function(nu,callback){
     if(dbconnection.connection){ 
-        dbconnection.connection.query('SELECT vendorURL FROM verndoradvertiestment', [],function (err, rows, fields) {
+        dbconnection.connection.query('SELECT adId, vendorURL FROM verndoradvertiestment', [],function (err, rows, fields) {
             if (err){
                 callback(err);
             }else{
