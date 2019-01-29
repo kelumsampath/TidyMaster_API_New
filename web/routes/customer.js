@@ -226,20 +226,5 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
     })
   });
 
-  router.post('/promote',token.verifytoken, (req, res) => {
-    var userdata = req.user;
-    var data={
-      postid:req.body.postid,
-      rate:req.userdata.uid
-    }
-    //console.log(req.body.postid)
-    jobmodel.promotejob(data,(err, abc) => {
-      if (err) {
-        //console.log(err);
-        res.send({ state: false, msg: "Server error" });
-      } else {
-        res.send({ state: true, msg:"cleaner selected" });
-      }
-    })
-  });
+  
   
