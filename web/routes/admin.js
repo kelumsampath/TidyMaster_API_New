@@ -519,10 +519,10 @@ router.post('/viewadminbyid',token.verifytoken,(req,res)=>{
 router.post('/promotejob',token.verifytoken, (req, res) => {
   var userdata = req.user;
   var data={
-    postid:req.body.postid,
+    postid:req.body.postid.postid,
     feeid:"pf1"
   }
-  //console.log(req.body.postid)
+  console.log(data)
   jobmodel.promotejob(data,(err, abc) => {
     if (err) {
       //console.log(err);
