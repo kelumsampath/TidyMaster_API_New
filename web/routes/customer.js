@@ -227,4 +227,19 @@ router.post('/viewactivejob',token.verifytoken,(req,res)=>{
     })
   });
 
+  router.post('/cleanerprofile',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    var data={
+      username:req.body.username
+    }
+    console.log(data)
+    datamodelds.cleanerprofile(data,(err, abc) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, userdata:abc });
+      }
+    })
+  });
 
