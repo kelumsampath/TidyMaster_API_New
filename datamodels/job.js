@@ -360,7 +360,7 @@ module.exports.getcleanerdonejobs=function(uid,callback){
                 callback(err);
             }else{
                 callback(null,rows);
-            }
+            }x
         })
     }else{
         callback(err);
@@ -457,4 +457,48 @@ module.exports.getcleanerdonejobs=function(uid,callback){
        }  
  }
 
+ module.exports.ratecleaner=function(data,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('CALL rateCleaner(?,?)', [data.uid,data.rate],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
 
+ module.exports.ratecustomer=function(data,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('CALL ratecustomer(?,?)', [data.uid,data.rate],function (err, rows, fields) {
+            if (err){
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }
+
+ module.exports.promotejob=function(data,callback){
+    if(dbconnection.connection){ 
+        dbconnection.connection.query('CALL promoteJob(?,?,?)', [data.postid,shortid.generate(),data.feeid],function (err, rows, fields) {
+            if (err){
+                console.log(err)
+                callback(err);
+            }else{
+               // console.log(rows);
+                callback(null,rows);
+            }      
+          })  
+       }else{
+           callback(err);
+       }  
+ }

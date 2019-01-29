@@ -152,3 +152,32 @@ router.post('/getdonejobs',token.verifytoken, (req, res) => {
       }
     })
   })
+
+  router.post('/customerprofile',token.verifytoken,(req,res)=>{
+    
+    jobmodel.customerprofile(req.body.customerid,(err,jobs)=>{
+      if(err){
+        console.log(err);
+        res.send({state:false,msg:"db error"});
+      }else{
+        res.send({state:true,customerjobs:jobs});
+      }
+    })
+  })
+
+  router.post('/ratecustomer',token.verifytoken, (req, res) => {
+    var userdata = req.user;
+    var data={
+      udi:req.body.uid,
+      rate:req.body.rate
+    }
+    //console.log(req.body.postid)
+    jobmodel.ratecustomer(data,(err, abc) => {
+      if (err) {
+        //console.log(err);
+        res.send({ state: false, msg: "Server error" });
+      } else {
+        res.send({ state: true, msg:"customer rated" });
+      }
+    })
+  });

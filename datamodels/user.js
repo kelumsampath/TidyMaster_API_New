@@ -21,6 +21,7 @@ module.exports.dbSave = function (regUser, callback) {
                         if (err) {
                             callback(err);
                         } else {
+                            console.log("DB Success");
                             callback(null, true);
                         }
                     })
@@ -285,6 +286,74 @@ module.exports.removeuser = function(uid,callback){
              //console.log(rows[0]);
              var res=JSON.parse(JSON.stringify(rows[0]))
              callback(null,res);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+ module.exports.customerprofile=function(customerid,callback){
+    // const query = {username:username};
+    // datamodels.findOne(query,callback);
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM user u, role r,customer c WHERE u.roleid=r.roleid AND u.uid=c.uid AND c.customerid=?', [customerid],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             //dbconnection.connection.end();
+             //console.log(rows[0]);
+             var res=JSON.parse(JSON.stringify(rows[0]))
+             callback(null,res);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
+
+
+ module.exports.fogotpassword=function(data,callback){
+     console.log(data)
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(data.newpassword, salt, function (err, hash) {
+            data.newpassword = hash;
+            if (err) {
+                //throw err;
+                console.log(err)
+                callback(null,false)
+            } else {
+                if (dbconnection.connection) {
+                    dbconnection.connection.query('UPDATE user SET password=? WHERE uid=?', [data.newpassword,data.uid], function (err, rows, fields) {
+                        if (err) {
+                            console.log(err)
+                            callback(err);
+                        } else {
+                            console.log(rows)
+                            callback(null, true);
+                        }
+                    })
+                } else {
+                    callback(err);
+                }
+            }
+        });
+    });
+ }; 
+
+ module.exports.createcomplain=function(complain,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('INSERT INTO complain VALUES (?,?,?,?,?,?)', [shortid.generate(),complain.jobid,complain.uid,complain.complain,mydate('full', '-', ':'),complain.status],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             
+             callback(null,rows);
          }
        
          

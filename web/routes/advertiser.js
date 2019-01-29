@@ -75,10 +75,12 @@ router.post('/getAllAds',token.verifytoken, (req, res) => {
   })
 });
 
-router.post('/getDailyViews', (req, res) => {
-  //console.log(req.body.postid)
-
-  venderadmodel.getDailyViews(req.body.adId, (err, job) => {
+router.post('/getDailyViews', token.verifytoken,  (req, res) => {
+  
+  const adId={
+    adId:req.body.id
+  }
+  venderadmodel.getDailyViews(req.body.id, (err, ad) => {
     if (err) {
       console.log(err);
       res.send({ state: false, msg: "Server error" });
@@ -91,10 +93,10 @@ router.post('/getDailyViews', (req, res) => {
 router.post('/getAllAdsByMonth', token.verifytoken, (req, res) => {
 
   var userdata = req.user;
- // console.log(userdata.username);
+ //console.log(userdata.username);
   venderadmodel.getAllAdsByMonth(userdata.username, (err, active) => {
     if (err) {
-
+      console.log(err);
       res.send({ state: false, msg: "Server error" });
     } else {
 

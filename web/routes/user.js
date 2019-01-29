@@ -30,7 +30,7 @@ router.get('/',(req,res)=>{
     //console.log(req.body);
     var public_id,url;
     cloudinary.defaultuser((callb)=>{
-      //console.log(callb.public_id)
+      console.log(callb.public_id)
       //console.log(callb.url)
       public_id=callb.public_id;
       url=callb.url;
@@ -54,9 +54,10 @@ router.get('/',(req,res)=>{
       role:req.body.role,
       address:req.body.address
     };
-   // console.log(regUser);
+    console.log(regUser);
     datamodelds.dbSave(regUser,(err,user)=>{
       if(err){
+        console.log(err);
         cloudinary.deleteimage(public_id,(callbk)=>{
           if (err.code === 'ER_DUP_ENTRY' ) {
               console.log('There was a duplicate key error');
@@ -282,6 +283,65 @@ router.post('/profpicchange',upload.single('editprofpic'),token.verifyfiletoken,
   })
   
  });
+
+
+ router.post('/fogetpassword', (req, res) => {
+  var data={
+    username:req.body.username
+  }
+  var genpassword;
+    genaratePassword.genaratepass((pass)=>{
+     
+      genpassword=pass;
+    })
+  console.log(data)
+  datamodelds.searchUser(req.body.username,function(err,user){
+    if(err){
+      res.json({state:false,msg:"server error occured!!"});
+      }
+  
+    if(user){
+      var mydata={
+        uid:user.uid,
+        newpassword:genpassword
+      }
+      datamodelds.fogotpassword(mydata,(err,callb)=>{
+        var userdata={
+          email:user.email,
+          password:genpassword
+        }
+          email.fogetpassword(userdata,(err,cb)=>{
+            if (err) {
+              //console.log(err);
+              res.send({ state: false, msg: "Server error2" });
+            }else{
+              res.send({ state: true, msg:"System genarated password has been send to your email!" });
+            }
+          })
+      })
+    }else{
+      res.json({state:false,msg:"No user found!"});
+    }
+  })
+});
+
+router.post('/complainuser',token.verifytoken,(req,res)=>{
+    var complain={
+      jobid:req.body.jobid,
+      uid:req.body.uid,
+      complain:req.body.complain,
+      status:"pending",
+
+    }
+  datamodelds.createcomplain(complain,(err,cb)=>{
+    if(err){
+      console.log(err);
+      res.send({state:false,msg:"db error"});
+    }else{
+      res.send({state:true,msg:"complain recorded!"});
+    }
+  })
+})
 
 
 
