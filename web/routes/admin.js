@@ -522,7 +522,7 @@ router.post('/promotejob',token.verifytoken, (req, res) => {
     postid:req.body.postid.postid,
     feeid:"pf1"
   }
-  console.log(data)
+   console.log(data)
   jobmodel.promotejob(data,(err, abc) => {
     if (err) {
       //console.log(err);
