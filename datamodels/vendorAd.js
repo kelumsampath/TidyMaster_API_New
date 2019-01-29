@@ -54,3 +54,23 @@ module.exports.getAllAds=function(username,callback){
            callback(err);
        }   
  }
+
+
+ module.exports.countViews = function(adId,callback){
+    
+    if(dbconnection.connection){ 
+       
+        dbconnection.connection.query('CALL countviews(?)', [adId],function (err, rows, fields) {
+            if (err){
+               
+                callback(err);
+            }else{
+             
+                callback(null,rows);
+            }                  
+          })  
+       }else{
+           callback(err);
+       }   
+ }
+
