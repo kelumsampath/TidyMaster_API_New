@@ -362,3 +362,21 @@ module.exports.removeuser = function(uid,callback){
         callback(err);
     }
  }; 
+
+ module.exports.cleanerprofile=function(data,callback){
+   
+    if(dbconnection.connection){ 
+     dbconnection.connection.query('SELECT * FROM cleaner c,user u,role r WHERE c.uid=u.uid AND r.roleid=u.roleid AND u.username=?', [data.username],function (err, rows, fields) {
+         if (err){
+             callback(err);
+         }else{
+             
+             callback(null,rows[0]);
+         }
+       
+         
+       })  
+    }else{
+        callback(err);
+    }
+ }; 
